@@ -5,6 +5,9 @@ NOTES:
 - Animate CSS only works with jQuery.
 ---------------------------------------- */
 
+// for testing purposes
+console.log('version 1.2.0-beta1');
+
 var Autofill = (function () {
     'use strict';
 
@@ -931,7 +934,6 @@ var Autofill = (function () {
             for (let autofillTag in regReplace) {
                 let findMe = regReplace[autofillTag];
 
-//                console.log(autofillTag);
                 // if text has already been flagged as a possible autofill, skip rechecking the text node
                 if (text.indexOf('~~@') === 0) {
                     continue;
@@ -1042,7 +1044,6 @@ var Autofill = (function () {
             myHighlightStyles.type = 'text/css';
             myHighlightStyles.id = 'highlightStyles';
             myHighlightStyles.innerHTML = highlightStyles;
-
 
             // Bind iFrame onload event
             viewerIframe[0].onload = function () {
