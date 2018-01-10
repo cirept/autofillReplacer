@@ -6,7 +6,7 @@ NOTES:
 ---------------------------------------- */
 
 // for testing purposes
-console.log('version 1.2.0-beta1');
+console.log('version 1.2.0-beta3');
 
 var Autofill = (function () {
     'use strict';
