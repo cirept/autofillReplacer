@@ -242,7 +242,7 @@ var Autofill = (function () {
     autofillToolContainer.appendChild(autofillOptionsContainer);
     autofillToolContainer.appendChild(modeContainer);
 
-        autofillToolContainer.appendChild(defaultReset);
+    autofillToolContainer.appendChild(defaultReset);
     autofillToolContainer.appendChild(addButton);
     autofillToolContainer.appendChild(autofillDropdown);
 
@@ -469,7 +469,7 @@ var Autofill = (function () {
         removeMeContainer.appendChild(removeMe);
 
         // build list item
-//        listElement.appendChild(grabHandle);
+        //        listElement.appendChild(grabHandle);
         listElement.appendChild(myInput);
         listElement.appendChild(myPointer);
         listElement.appendChild(label);
@@ -931,20 +931,32 @@ var Autofill = (function () {
             for (let autofillTag in regReplace) {
                 let findMe = regReplace[autofillTag];
 
+//                console.log(autofillTag);
+                // if text has already been flagged as a possible autofill, skip rechecking the text node
+                if (text.indexOf('~~@') === 0) {
+                    continue;
+                }
+
                 // if split phrases are needed
                 if (findMe.indexOf('``') > -1) {
-                    let findArray = findMe.split('``');
+                    // declare local variables
+                    let findArray = findMe.split('``'); // create an array of the combined search values
                     let arrayLength = findArray.length;
+
+                    // loop through combined 'search values' string
                     for (let a = 0; a < arrayLength; a += 1) {
+                        // declare variables
                         let searchText = findArray[a].trim();
                         let findThis = phoneNumberText(searchText);
                         let myRegex = new RegExp(findThis, 'gi');
 
+                        // if the search text is blank skip
                         if (searchText === '') {
                             continue;
                         }
 
-                        text = text.replace(myRegex, autofillTag);
+                        // replace
+                        text = text.replace(myRegex, `~~@${searchText}@~~`); // replace with highlight span
                     }
                 } else {
                     // create regex variable
@@ -1056,7 +1068,7 @@ var Autofill = (function () {
 
             viewerIframe[0].src = viewerIframe[0].src + '&disableAutofill=true';
 
-        }  else if (location.pathname.indexOf('cms') >= 0) {
+        } else if (location.pathname.indexOf('cms') >= 0) {
             // ---------------------------------------- CMS LOGIC
 
             // alert user
