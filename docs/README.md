@@ -136,7 +136,7 @@ Resets the tool to the most commonly used autofill tags.
 * %FRANCHISES%
 * %STREET%
 * %CITY%
-* %STATE%
+* %STATE_FULL_NAME%
 * %ZIP%
 * %PHONE%
 * %NEW_PHONE%
