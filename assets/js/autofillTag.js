@@ -65,19 +65,20 @@ var Autofill = (function () {
     // ******************************************************************************************
 
     let myURL = 'https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json';
-    let defaultList = {
-        '%DEALER_NAME%': 'SEARCH_FOR_ME',
-        '%FRANCHISES%': 'SEARCH_FOR_ME',
-        '%STREET%': 'SEARCH_FOR_ME',
-        '%CITY%': 'SEARCH_FOR_ME',
-        '%STATE%': 'SEARCH_FOR_ME',
-        '%ZIP%': 'SEARCH_FOR_ME',
-        '%PHONE%': 'SEARCH_FOR_ME',
-        '%NEW_PHONE%': 'SEARCH_FOR_ME',
-        '%USED_PHONE%': 'SEARCH_FOR_ME',
-        '%SERVICE_PHONE%': 'SEARCH_FOR_ME',
-        '%PARTS_PHONE%': 'SEARCH_FOR_ME',
-    };
+    //    let defaultList = {
+    //        '%DEALER_NAME%': 'SEARCH_FOR_ME',
+    //        '%FRANCHISES%': 'SEARCH_FOR_ME',
+    //        '%STREET%': 'SEARCH_FOR_ME',
+    //        '%CITY%': 'SEARCH_FOR_ME',
+    //        '%STATE_FULL_NAME%': 'SEARCH_FOR_ME',
+    //        '%ZIP%': 'SEARCH_FOR_ME',
+    //        '%PHONE%': 'SEARCH_FOR_ME',
+    //        '%NEW_PHONE%': 'SEARCH_FOR_ME',
+    //        '%USED_PHONE%': 'SEARCH_FOR_ME',
+    //        '%SERVICE_PHONE%': 'SEARCH_FOR_ME',
+    //        '%PARTS_PHONE%': 'SEARCH_FOR_ME',
+    //    };
+    let defaultList = {};
     // ----------------------------------------
     // designated FA class for tool modes
     // ----------------------------------------
@@ -392,12 +393,12 @@ var Autofill = (function () {
             }
             // store data in tool defaultList array
             defaultList['%DEALER_NAME%'] = myDiv.querySelector('input[name="name"]').value;
+            defaultList['%FRANCHISES%'] = myFranchises.join(', ');
             defaultList['%STREET%'] = myDiv.querySelector('input#contact_address_street1').value;
             defaultList['%CITY%'] = myDiv.querySelector('input#contact_address_city').value;
+            defaultList['%STATE_FULL_NAME%'] = myDiv.querySelector('select#contact_address_state').value;
             defaultList['%ZIP%'] = myDiv.querySelector('input#contact_address_postalCode').value;
-            defaultList['%STATE%'] = myDiv.querySelector('select#contact_address_state').value;
-            defaultList['%PHONE%'] = myDiv.querySelector('input[name="contact_phone_number"]').value;
-            defaultList['%FRANCHISES%'] = myFranchises.join(', ');
+            //            defaultList['%PHONE%'] = myDiv.querySelector('input[name="contact_phone_number"]').value;
         }, 'html');
     }
 
@@ -430,7 +431,7 @@ var Autofill = (function () {
     function listItem(autofill, text) {
 
         if (!text) {
-            text = 'SEARCH_FOR_ME';
+            text = 'TEXT_TO_LOOK_FOR';
         }
 
         let listElement = document.createElement('li');
@@ -1438,11 +1439,11 @@ var Autofill = (function () {
     }
 
     .autofillTag {
-        width: 120px;
         display: inline-block;
         text-align: center;
         color: black;
         word-wrap: break-word;
+        flex-grow: 1;
     }
 
     .regEx {
@@ -1451,17 +1452,17 @@ var Autofill = (function () {
         border: 1px solid rgb(255, 255, 255);
         line-height: 1.25rem;
         text-indent: 10px;
-        /*margin: 0 0 0 15px;*/
-        width: 230px !important;
-        /*width: 200px !important;*/
+        width: 175px !important;
     }
 
     .autofillEntry {
-        width: auto;
         padding: 5px 10px;
         border: 1px solid #793CC4;
         margin: 3px 10px;
         color: #793CC4;
+        display: flex;
+        align-items: center;
+        justify-content: space-evenly;
     }
 
     .js-remove {
@@ -1727,8 +1728,8 @@ var Autofill = (function () {
     let sortable = Sortable.create(autofillOptionsList, {
         'group': 'autofillOptions',
         //        'delay': 0,
-        'sort': true,
-        //        'handle': '.my-handle',
+        //        'sort': true,
+        'handle': '.my-handle',
         //        'chosenClass': 'chosen',
         //        'animation': 150,
         // Element dragging started
@@ -1817,19 +1818,19 @@ var Autofill = (function () {
             }
         },
         // Called by any change to the list (add / update / remove)
-        //        'onSort': function (evt) {
-        //
-        //            //            console.log(evt);
-        //            //            console.log('changing values');
-        //
-        //            // update display message
-        //            messageDisplay.textContent = 'Values Saved';
-        //            jQuery('#toolMessageDisplay').animateCss('bounceIn');
-        //
-        //            // Save state
-        //            this.save();
-        //            saveToLocalStorage(createArray());
-        //        },
+        'onSort': function (evt) {
+
+            //            console.log(evt);
+            //            console.log('changing values');
+
+            // update display message
+            messageDisplay.textContent = 'Values Saved';
+            jQuery('#toolMessageDisplay').animateCss('bounceIn');
+
+            // Save state
+            this.save();
+            saveToLocalStorage(createArray());
+        },
     });
 
 })();
