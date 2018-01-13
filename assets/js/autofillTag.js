@@ -12,6 +12,297 @@ var Autofill = (function () {
     'use strict';
 
     // ******************************************************************************************
+    // CSS FOR TOOL
+    // ******************************************************************************************
+    /**
+     * css styles for tool
+     */
+    function styleTools() {
+
+        let animate = document.createElement('link');
+        animate.rel = 'stylesheet';
+        animate.type = 'text/css';
+        animate.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css';
+
+        let toolStyles = `
+            #autofillTool {
+                position: absolute;
+                top: 0;
+                left: 195px;
+                width: auto;
+                color: white;
+                font-size: 11px;
+                animation-duration: 1.5s;
+                -webkit-animation-duration: 1.5s;
+            }
+
+            #toolMessageDisplay {
+                display: inline-block;
+                width: 80%;
+                font-size: 13px;
+                text-align: center;
+                color: red;
+            }
+
+            #addAutofill {
+                width: 90%;
+                padding: 5px 30px;
+            }
+
+            .myButts {
+                background: #824FD6;
+                border-radius: 5px;
+                color: #fff;
+                border: 1px solid rgb(147, 143, 143);
+            }
+
+            .myButts:hover {
+                background: #793CC4;
+                cursor: pointer;
+                cursor: hand;
+            }
+
+            .applyAutofills {
+                display: inline-block;
+                padding: 5px 25px;
+                /*background: rgb(130, 198, 0);*/
+            }
+
+            .applyAutofills > * {
+                margin: 0 3px;
+            }
+
+            .applyAutofills > .inline {
+                display: inline;
+            }
+
+            .applyAutofills.disabled {
+                background: #333;
+            }
+
+            #modeContainer {
+                padding: 5px;
+                color: black;
+                background: rgb(234, 232, 232);
+                border-bottom-right-radius: 5px;
+            }
+
+            #autofillToolContainer {
+                background: rgb(234, 232, 232);
+                padding: 10px;
+                border-left: 1px solid rgb(130, 79, 214);
+                border-right: 1px solid rgb(130, 79, 214);
+                border-bottom: 1px solid rgb(130, 79, 214);
+            }
+
+            #autofillToolTab {
+                padding: 5px 0 10px 0;
+                text-align: center;
+                width: 100px;
+                display: inline-block;
+                font-size: 13px;
+                background: rgb(130, 79, 214);
+                border-radius: 0 0 50% 50%;
+                cursor: pointer;
+                cursor: hand;
+                animation-duration: .75s;
+                -webkit-animation-duration: .75s;
+            }
+
+            #autofillOptions {
+
+            }
+
+            #autofillOptionsContainer {
+                width: 450px;
+                border: 1px solid rgb(153, 153, 153);
+                margin: 5px 0;
+                padding: 5px 0;
+                text-align: center;
+            }
+
+            #autofillOptionsContainer > div {
+                color: rgb(153, 153, 153);
+                font-size: 14px;
+            }
+
+            .vertical {
+                position: absolute;
+                right: -51px;
+                width: 40px;
+                top: 55px;
+                border-top-right-radius: 5px;
+                border-top: 1px solid rgb(130, 79, 214);
+                border-bottom: 1px solid rgb(130, 79, 214);
+                border-right: 1px solid rgb(130, 79, 214);
+            }
+
+            .horizontal {
+                width: 115px;
+                top: 30px;
+                height: 50px;
+                text-align: center;
+            }
+
+            .modes {
+                margin: 5px 0;
+                padding: 5px;
+                width: 35px;
+            }
+
+            .horizontal .modes {
+                margin: 5px 10px;
+            }
+
+            .minimizeList {
+
+            }
+
+            #defaultReset {
+                position: relative;
+                float: right;
+                width: 10%;
+                padding: 5px;
+            }
+
+            .secondary {
+                background: rgb(234, 232, 232);
+                color: rgb(130, 79, 214);
+            }
+
+            .secondary:hover {
+                background: rgb(130, 79, 214);
+                color: rgb(234, 232, 232);
+            }
+
+            .my-handle {
+                border: 1px dotted #793CC4;
+                padding: 2px 6px 2px 5px;
+                cursor: move;
+                cursor: -webkit-grabbing;
+            }
+
+            .autofillTag {
+                display: inline-block;
+                text-align: center;
+                color: black;
+                word-wrap: break-word;
+                flex-grow: 1;
+            }
+
+            .regEx {
+                background: #793CC4;
+                color: #fff;
+                border: 1px solid rgb(255, 255, 255);
+                line-height: 1.25rem;
+                text-indent: 10px;
+                width: 175px !important;
+            }
+
+            .autofillEntry {
+                padding: 5px 10px;
+                border: 1px solid #793CC4;
+                margin: 3px 10px;
+                color: #793CC4;
+                display: flex;
+                align-items: center;
+                justify-content: space-evenly;
+            }
+
+            .js-remove {
+                cursor: pointer;
+                cursor: hand;
+                padding: 0 0 0 10px;
+                display: inline-block;
+            }
+
+            .leftMarg {
+                margin: 0 0 0 15px;
+            }
+
+            .autofill-dropdown {
+                height: 400px;
+                width: 100%;
+                overflow: auto;
+                position: absolute;
+                background: #0A0808;
+                left: 0px;
+            }
+
+            .autofill-dropdown:focus {
+                outline: 0;
+            }
+
+            .autofill-dropdown li {
+                text-align: center;
+                font-size: 12px;
+                padding: 5px 0;
+            }
+
+            .autofill-dropdown li:hover {
+                background: rgba(121, 60, 196, .5);
+                cursor: pointer;
+                cursor: hand;
+            }
+
+            .hide {
+                display: none;
+            }
+
+            .disabled {
+                pointer-events: none;
+                background: rgba(0,0,0,.75);
+                cursor: no-drop;
+            }
+
+            .myError {
+                border: 1px solid red;
+            }
+
+            .chosen {
+                color: #fff;
+                background-color: rgb(130, 198, 0);
+            }
+
+            .highlightMe {
+                background: yellow;
+            }
+
+            .quickAccess {
+                position: absolute;
+                font-size: 12px;
+                width: 100%;
+                padding: 5px 0;
+            }
+
+            .active,
+            .active:hover {
+                color: white;
+            }
+
+            button[data-mode="replace"].active,
+            button[data-mode="replace"].applyAutofills{
+                background: rgb(130, 198, 0);
+            }
+
+            button[data-mode="highlight"].active,
+            button[data-mode="highlight"].applyAutofills{
+                background: rgb(0, 153, 255);
+            }
+            `;  // end tool styles
+
+        const myStyles = document.createElement('style');
+        myStyles.type = 'text/css';
+        myStyles.id = 'toolStyles';
+        myStyles.innerHTML = toolStyles;
+        //        myStyles.src = 'https://rawgit.com/cirept/autofillReplacer/master/assets/js/autofillTag.js';
+
+        // attach styles to page
+        document.head.append(myStyles);
+        document.head.append(animate);
+    }
+
+    // ******************************************************************************************
     // TAMPERMONKEY FUNCTIONS
     // ******************************************************************************************
 
@@ -65,19 +356,6 @@ var Autofill = (function () {
     // ******************************************************************************************
 
     let myURL = 'https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json';
-    //    let defaultList = {
-    //        '%DEALER_NAME%': 'SEARCH_FOR_ME',
-    //        '%FRANCHISES%': 'SEARCH_FOR_ME',
-    //        '%STREET%': 'SEARCH_FOR_ME',
-    //        '%CITY%': 'SEARCH_FOR_ME',
-    //        '%STATE_FULL_NAME%': 'SEARCH_FOR_ME',
-    //        '%ZIP%': 'SEARCH_FOR_ME',
-    //        '%PHONE%': 'SEARCH_FOR_ME',
-    //        '%NEW_PHONE%': 'SEARCH_FOR_ME',
-    //        '%USED_PHONE%': 'SEARCH_FOR_ME',
-    //        '%SERVICE_PHONE%': 'SEARCH_FOR_ME',
-    //        '%PARTS_PHONE%': 'SEARCH_FOR_ME',
-    //    };
     let defaultList = {};
     // ----------------------------------------
     // designated FA class for tool modes
@@ -140,6 +418,7 @@ var Autofill = (function () {
     // ----------------------------------------
     let applyAutofills = document.createElement('button');
     applyAutofills.classList.add('applyAutofills', 'myButts');
+    applyAutofills.dataset.mode = '';
     applyAutofills.type = 'button';
     applyAutofills.title = 'apply autofills';
     // ----------------------------------------
@@ -149,6 +428,7 @@ var Autofill = (function () {
     let applyAutofillsShort = document.createElement('button');
     applyAutofillsShort.classList.add('applyAutofills', 'myButts', 'quickAccess', 'hide');
     applyAutofillsShort.type = 'button';
+    applyAutofillsShort.dataset.mode = '';
     applyAutofillsShort.title = 'apply autofills';
     // Add APPLY button Icon
     let applyIcon = document.createElement('i');
@@ -184,14 +464,14 @@ var Autofill = (function () {
     modeTitle.textContent = 'modes';
     // replace autofills
     let replaceAutofillsButt = document.createElement('button');
-    replaceAutofillsButt.classList.add('modes', 'secondary', 'myButts', 'replace');
-    replaceAutofillsButt.dataset.feature = 'replace';
+    replaceAutofillsButt.classList.add('modes', 'secondary', 'myButts');
+    replaceAutofillsButt.dataset.mode = 'replace';
     replaceAutofillsButt.title = 'replace';
     replaceAutofillsButt.type = 'button';
     // highlight autofills
     let highlightAutofillsButt = document.createElement('button');
-    highlightAutofillsButt.classList.add('modes', 'secondary', 'myButts', 'highlight');
-    highlightAutofillsButt.dataset.feature = 'highlight';
+    highlightAutofillsButt.classList.add('modes', 'secondary', 'myButts');
+    highlightAutofillsButt.dataset.mode = 'highlight';
     highlightAutofillsButt.title = 'highlight';
     highlightAutofillsButt.type = 'button';
     // highlight button Icon
@@ -330,6 +610,90 @@ var Autofill = (function () {
         }
     }
 
+    // ----------------------------------------
+    // ----------------------------------------
+    /**
+     *   Update main tool function button
+     */
+    function updateRunButtons(mode) {
+        // create icon data text
+        let iconClassText = iconClass();
+        let start = iconClassText.indexOf('-') + 1;
+        let dataText = iconClassText.substring(start);
+        let applyButtons = document.querySelectorAll('button.applyAutofills');
+        let length = applyButtons.length;
+
+        for (let y = 0; y < length; y += 1) {
+            let currentApplyButton = applyButtons[y];
+            currentApplyButton.dataset.mode = mode;
+            currentApplyButton.querySelector('svg[data-icon]').dataset.icon = dataText;
+            if (currentApplyButton.querySelector('div.inline')) {
+                currentApplyButton.querySelector('div.inline').innerHTML = shared.getValue('mode');
+            }
+        }
+        // update QUICK ACCESS button
+        //        applyAutofillsShort.dataset.mode = mode;
+        //        applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
+        //        applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
+
+        // update MAIN TOOL button
+        //        applyAutofills.dataset.mode = mode;
+        //        applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
+    }
+
+    /**
+     *   Will turn activate specified mode button
+     *   @param {string} activateMode = mode that is currently active, SKIPS THIS BUTTON
+     */
+    function activateMode(mode) {
+        // save buttons found in mode container
+        let modeButtons = modeContainer.querySelectorAll('button.modes');
+        // define array length
+        let length = modeButtons.length;
+        // loop through buttons in mode container
+        for (let y = 0; y < length; y += 1) {
+            // save reference to button, for easier reading
+            let currentModeButton = modeButtons[y];
+            // activate mode button
+            if (currentModeButton.dataset.mode === mode) {
+                currentModeButton.classList.add('active');
+                currentModeButton.title = currentModeButton.title + '*active*';
+            }
+            // remove *active* text from title
+            // find *active* text
+            let buttonTitle = modeButtons[y].title;
+            let startHere = buttonTitle.indexOf('*active*');
+            buttonTitle = buttonTitle.substring(0, startHere);
+        }
+    }
+
+    /**
+     *   Set "apply" buttons to the correct mode settings
+     *   @param {string} mode = mode grabbed from memory
+     */
+    function setRunButtons(mode) {
+        // define local variables
+        let iconClassText = iconClass();    // get the FONT AWESOME icon class for the mode
+        let applyButtons = document.querySelectorAll('button.applyAutofills');
+        let length = applyButtons.length;
+        // loop through all APPLY Buttons in tool
+        for (let y = 0; y < length; y += 1) {
+            // save reference, for easier reading
+            let currentApplyButton = applyButtons[y];
+            // set mode data attribute
+            currentApplyButton.dataset.mode = mode;
+            // set icon class in <i> element for activated mode, can only change icons like this
+            // when initializing the tool.  After tool has been built, targeting the svg element is required.
+            currentApplyButton.querySelector('i.fas').classList.add(iconClassText);
+            // specifically for the "quick access" button
+            if (currentApplyButton.querySelector('div.inline')) {
+                // update text inside button
+                currentApplyButton.querySelector('div.inline').innerHTML = mode;
+            }
+        }
+    }
+    // ----------------------------------------
+    // ----------------------------------------
     /**
      *   Load local tool settings
      *   Mode : Replace or Highlight
@@ -339,31 +703,9 @@ var Autofill = (function () {
         let toolSettings = shared.programData();
         // change actions depending IF there is LOCAL DATA stored on users computer
         if (Object.keys(toolSettings).length > 0) { // if LOCAL DATA IS FOUND
-            // declare local variable
-            let modeText;
-            // this will run if there is tool settings available in local storage
-            if (toolSettings.mode.indexOf('replace') > -1) {
-                // set button text variable
-                modeText = 'replace';
-                // set REPALCER as ACTIVE mode
-                replaceAutofillsButt.classList.add('active');
-                replaceAutofillsButt.classList.remove('secondary');
-                replaceAutofillsButt.title = `${modeText} *active*`;
-            } else if (toolSettings.mode.indexOf('highlight') > -1) {
-                // set button text variable
-                modeText = 'highlight';
-                // set HIGHLIGHT as ACTIVE mode
-                highlightAutofillsButt.classList.add('active');
-                highlightAutofillsButt.classList.remove('secondary');
-                highlightAutofillsButt.title = `${modeText} *active*`;
-            }
-            // set descriptive title text
-            applyAutofillsShort.title = `*${modeText}* autofills`;
-            // apply class to "Magic" button
-            applyAutofillsShort.classList.toggle(modeText);
-            applyAutofills.classList.toggle(modeText);
-            // build buttons
-            buildButtons(modeText);
+            let activeMode = toolSettings.mode;
+            activateMode(activeMode);
+            setRunButtons(activeMode);
         } else { // if LOCAL DATA IS NOT FOUND, ie running the tool for the first time.
             // set REPALCER as ACTIVE mode
             replaceAutofillsButt.classList.add('active');
@@ -1271,292 +1613,6 @@ var Autofill = (function () {
     };
 
     /**
-     * css styles for tool
-     */
-    function styleTools() {
-
-        let animate = document.createElement('link');
-        animate.rel = 'stylesheet';
-        animate.type = 'text/css';
-        animate.href = 'https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css';
-
-        let toolStyles = `
-    #autofillTool {
-        position: absolute;
-        top: 0;
-        left: 195px;
-        width: auto;
-        color: white;
-        font-size: 11px;
-        animation-duration: 1.5s;
-        -webkit-animation-duration: 1.5s;
-    }
-
-    #toolMessageDisplay {
-        display: inline-block;
-        width: 80%;
-        font-size: 13px;
-        text-align: center;
-        color: red;
-    }
-
-    #addAutofill {
-        width: 90%;
-        padding: 5px 30px;
-    }
-
-    .myButts {
-        background: #824FD6;
-        border-radius: 5px;
-        color: #fff;
-        border: 1px solid rgb(147, 143, 143);
-    }
-
-    .myButts:hover {
-        background: #793CC4;
-        cursor: pointer;
-        cursor: hand;
-    }
-
-    .applyAutofills {
-        display: inline-block;
-        padding: 5px 25px;
-        /*background: rgb(130, 198, 0);*/
-    }
-
-    .applyAutofills > * {
-        margin: 0 3px;
-    }
-
-    .applyAutofills > .inline {
-        display: inline;
-    }
-
-    .applyAutofills.disabled {
-        background: #333;
-    }
-
-    #modeContainer {
-        padding: 5px;
-        color: black;
-        background: rgb(234, 232, 232);
-        border-bottom-right-radius: 5px;
-    }
-
-    #autofillToolContainer {
-        background: rgb(234, 232, 232);
-        padding: 10px;
-        border-left: 1px solid rgb(130, 79, 214);
-        border-right: 1px solid rgb(130, 79, 214);
-        border-bottom: 1px solid rgb(130, 79, 214);
-    }
-
-    #autofillToolTab {
-        padding: 5px 0 10px 0;
-        text-align: center;
-        width: 100px;
-        display: inline-block;
-        font-size: 13px;
-        background: rgb(130, 79, 214);
-        border-radius: 0 0 50% 50%;
-        cursor: pointer;
-        cursor: hand;
-        animation-duration: .75s;
-        -webkit-animation-duration: .75s;
-    }
-
-    #autofillOptions {
-
-    }
-
-    #autofillOptionsContainer {
-        width: 450px;
-        border: 1px solid rgb(153, 153, 153);
-        margin: 5px 0;
-        padding: 5px 0;
-        text-align: center;
-    }
-
-    #autofillOptionsContainer > div {
-        color: rgb(153, 153, 153);
-        font-size: 14px;
-    }
-
-    .vertical {
-        position: absolute;
-        right: -51px;
-        width: 40px;
-        top: 55px;
-        border-top-right-radius: 5px;
-        border-top: 1px solid rgb(130, 79, 214);
-        border-bottom: 1px solid rgb(130, 79, 214);
-        border-right: 1px solid rgb(130, 79, 214);
-    }
-
-    .horizontal {
-        width: 115px;
-        top: 30px;
-        height: 50px;
-        text-align: center;
-    }
-
-    .modes {
-        margin: 5px 0;
-        padding: 5px;
-        width: 35px;
-    }
-
-    .horizontal .modes {
-        margin: 5px 10px;
-    }
-
-    .minimizeList {
-
-    }
-
-    #defaultReset {
-        position: relative;
-        float: right;
-        width: 10%;
-        padding: 5px;
-    }
-
-    .secondary {
-        background: rgb(234, 232, 232);
-        color: rgb(130, 79, 214);
-    }
-
-    .secondary:hover {
-        background: rgb(130, 79, 214);
-        color: rgb(234, 232, 232);
-    }
-
-    .my-handle {
-        border: 1px dotted #793CC4;
-        padding: 2px 6px 2px 5px;
-        cursor: move;
-        cursor: -webkit-grabbing;
-    }
-
-    .autofillTag {
-        display: inline-block;
-        text-align: center;
-        color: black;
-        word-wrap: break-word;
-        flex-grow: 1;
-    }
-
-    .regEx {
-        background: #793CC4;
-        color: #fff;
-        border: 1px solid rgb(255, 255, 255);
-        line-height: 1.25rem;
-        text-indent: 10px;
-        width: 175px !important;
-    }
-
-    .autofillEntry {
-        padding: 5px 10px;
-        border: 1px solid #793CC4;
-        margin: 3px 10px;
-        color: #793CC4;
-        display: flex;
-        align-items: center;
-        justify-content: space-evenly;
-    }
-
-    .js-remove {
-        cursor: pointer;
-        cursor: hand;
-        padding: 0 0 0 10px;
-        display: inline-block;
-    }
-
-    .leftMarg {
-        margin: 0 0 0 15px;
-    }
-
-    .autofill-dropdown {
-        height: 400px;
-        width: 100%;
-        overflow: auto;
-        position: absolute;
-        background: #0A0808;
-        left: 0px;
-    }
-
-    .autofill-dropdown:focus {
-        outline: 0;
-    }
-
-    .autofill-dropdown li {
-        text-align: center;
-        font-size: 12px;
-        padding: 5px 0;
-    }
-
-    .autofill-dropdown li:hover {
-        background: rgba(121, 60, 196, .5);
-        cursor: pointer;
-        cursor: hand;
-    }
-
-    .hide {
-        display: none;
-    }
-
-    .disabled {
-        pointer-events: none;
-        background: rgba(0,0,0,.75);
-        cursor: no-drop;
-    }
-
-    .myError {
-        border: 1px solid red;
-    }
-
-    .chosen {
-      color: #fff;
-      background-color: rgb(130, 198, 0);
-    }
-
-    .active,
-    .active:hover {
-        background: rgb(130, 198, 0);
-    }
-
-    .highlightMe {
-        background: yellow;
-    }
-
-    .quickAccess {
-        position: absolute;
-        font-size: 12px;
-        width: 100%;
-        padding: 5px 0;
-    }
-
-    .applyAutofills.replace,
-    .active.replace {
-        background: rgb(130, 198, 0);
-    }
-
-    .applyAutofills.highlight,
-    .active.highlight {
-        background: rgb(0, 153, 255);
-    }
-    `;
-        const myStyles = document.createElement('style');
-        myStyles.type = 'text/css';
-        myStyles.id = 'toolStyles';
-        myStyles.innerHTML = toolStyles;
-
-        // attach styles to page
-        document.head.append(myStyles);
-        document.head.append(animate);
-    }
-
-    /**
      *   Check which mode is currently selected
      *   This will determine what action is run when the user clicks the MAGIC ICON button
      */
@@ -1577,80 +1633,74 @@ var Autofill = (function () {
     }
 
     /**
-     *   Actions to perform when the REPLACE MODE button is pressed
+     *   Will turn deactivate other mode buttons
      */
-    function replaceModeActions() {
-        // save MODE in local storage
-        shared.saveValue('mode', 'replace');
+    function deactivateModes() {
+        // save buttons found in mode container
+        let modeButtons = modeContainer.querySelectorAll('button.modes');
 
-        // if REPLACE MODE button element DOES NOT contain the active class add it
-        if (!replaceAutofillsButt.classList.contains('active')) {
-            replaceAutofillsButt.classList.add('active');
-            replaceAutofillsButt.classList.remove('secondary');
-            replaceAutofillsButt.title = 'replace *active*';
-            // set descriptive title text
-            applyAutofillsShort.title = '*Replace* Autofills';
-            // apply class to "Magic" buttons
-            applyAutofillsShort.classList.toggle('replace');
-            applyAutofillsShort.classList.toggle('highlight');
-            applyAutofills.classList.toggle('replace');
-            applyAutofills.classList.toggle('highlight');
-            // create icon data text
-            let iconClassText = iconClass();
-            let start = iconClassText.indexOf('-') + 1;
-            let dataText = iconClassText.substring(start);
-            // update APPLY BUTTONs
-            applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
-            applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
-            applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
+        // define array length
+        let length = modeButtons.length;
+
+        // loop through buttons in mode container
+        for (let y = 0; y < length; y += 1) {
+            // toggle classes off
+            modeButtons[y].classList.remove('active');
+            modeButtons[y].classList.add('secondary');
+
+            // remove *active* text from title
+            // find *active* text
+            let buttonTitle = modeButtons[y].title;
+            let startHere = buttonTitle.indexOf('*active*');
+            buttonTitle = buttonTitle.substring(0, startHere);
         }
 
-        // if HIGHLIGHT MODE button element DOES contain the active class add it
-        if (highlightAutofillsButt.classList.contains('active')) {
-            highlightAutofillsButt.classList.remove('active');
-            highlightAutofillsButt.classList.add('secondary');
-            highlightAutofillsButt.title = 'highlight';
-        }
-
-        // update Autofill button onclick event
-        checkModes();
     }
 
     /**
-     *   Actions to perform when the REPLACE MODE button is pressed
+     *   Changes the modes button states
+     *   Will turn ACTIVATE clicked button and DEACTIVATE all other buttons
+     *   @param {string} mode = the mode that was selected (replace, highlight)
      */
-    function highlightModeActions() {
+    function modeAction() {
+        // get MODE of button that was clicked
+        let mode = this.dataset.mode;
+
         // save MODE in local storage
-        shared.saveValue('mode', 'highlight');
+        shared.saveValue('mode', mode);
 
-        // if REPLACE MODE button element DOES NOT contain the active class add it
-        if (!highlightAutofillsButt.classList.contains('active')) {
-            highlightAutofillsButt.classList.add('active');
-            highlightAutofillsButt.classList.remove('secondary');
-            highlightAutofillsButt.title = 'highlight *active*';
-            // set descriptive title text
-            applyAutofillsShort.title = '*Highlight* Autofills';
-            // apply class to "Magic" buttons
-            applyAutofillsShort.classList.toggle('highlight');
-            applyAutofillsShort.classList.toggle('replace');
-            applyAutofills.classList.toggle('highlight');
-            applyAutofills.classList.toggle('replace');
-            // create icon data text
-            let iconClassText = iconClass();
-            let start = iconClassText.indexOf('-') + 1;
-            let dataText = iconClassText.substring(start);
-            // update APPLY BUTTONs
-            applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
-            applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
-            applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
+        // reset all mode buttons
+        deactivateModes();
+
+        // activate clicked MODE button
+        let activateButton = modeContainer.querySelector(`button[data-mode=${mode}]`);
+        activateButton.classList.add('active');
+        activateButton.classList.remove('secondary');
+        activateButton.title += ' *active*';
+
+        // save title
+        let title = applyAutofillsShort.title;
+        // Switch START FUNCTION imagery
+        if (title.indexOf('*Replace*') > -1) {
+            let start = title.indexOf(' ');
+            title = title.substring(start);
         }
 
-        // if HIGHLIGHT MODE button element DOES contain the active class add it
-        if (replaceAutofillsButt.classList.contains('active')) {
-            replaceAutofillsButt.classList.remove('active');
-            replaceAutofillsButt.classList.add('secondary');
-            replaceAutofillsButt.title = 'replace';
-        }
+        // create icon data text
+        let iconClassText = iconClass();
+        let start = iconClassText.indexOf('-') + 1;
+        let dataText = iconClassText.substring(start);
+
+        // update QUICK ACCESS button
+        applyAutofillsShort.dataset.mode = mode;
+        applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
+        applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
+
+        // update MAIN TOOL button
+        applyAutofills.dataset.mode = mode;
+        applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
+        //            applyAutofills.classList.toggle('replace');
+        //        applyAutofills.classList.toggle('highlight');
 
         // update Autofill button onclick event
         checkModes();
@@ -1672,8 +1722,10 @@ var Autofill = (function () {
      *   Elements go from <i> to <svg> elements
      */
     function attachClickActions() {
-        replaceAutofillsButt.onclick = replaceModeActions;
-        highlightAutofillsButt.onclick = highlightModeActions;
+        //        replaceAutofillsButt.onclick = replaceModeActions;
+        replaceAutofillsButt.onclick = modeAction;
+        //        highlightAutofillsButt.onclick = highlightModeActions;
+        highlightAutofillsButt.onclick = modeAction;
     }
 
     /**
