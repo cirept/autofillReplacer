@@ -289,7 +289,7 @@ var Autofill = (function () {
             button[data-mode="highlight"].applyAutofills{
                 background: rgb(0, 153, 255);
             }
-            `;  // end tool styles
+            `; // end tool styles
 
         const myStyles = document.createElement('style');
         myStyles.type = 'text/css';
@@ -357,9 +357,11 @@ var Autofill = (function () {
 
     let myURL = 'https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json';
     let defaultList = {};
+
     // ----------------------------------------
     // designated FA class for tool modes
     // ----------------------------------------
+
     const highlightIconClass = 'fa-lightbulb';
     const replaceIconClass = 'fa-exchange';
 
@@ -370,6 +372,7 @@ var Autofill = (function () {
     // *********************************************
     //  autofillOptionsContainer ELEMENT
     // *********************************************
+
     // "Active" Autofill Listing Container
     let autofillOptionsContainer = document.createElement('div');
     autofillOptionsContainer.id = 'autofillOptionsContainer';
@@ -403,9 +406,11 @@ var Autofill = (function () {
     autofillDropdown.tabIndex = '4';
     autofillDropdown.classList.add('autofill-dropdown');
     autofillDropdown.classList.add('hide');
+
     // ----------------------------------------
     // build autofillOptionsContainer
     // ----------------------------------------
+
     autofillOptionsContainer.appendChild(listTitle);
     autofillOptionsContainer.appendChild(autofillOptionsList);
 
@@ -416,14 +421,18 @@ var Autofill = (function () {
     // ----------------------------------------
     // expanded tool button
     // ----------------------------------------
+
     let applyAutofills = document.createElement('button');
     applyAutofills.classList.add('applyAutofills', 'myButts');
     applyAutofills.dataset.mode = '';
     applyAutofills.type = 'button';
     applyAutofills.title = 'apply autofills';
+
     // ----------------------------------------
     // quick access button
     // ----------------------------------------
+
+
     // Shortcut autofill button
     let applyAutofillsShort = document.createElement('button');
     applyAutofillsShort.classList.add('applyAutofills', 'myButts', 'quickAccess', 'hide');
@@ -439,6 +448,7 @@ var Autofill = (function () {
     // ----------------------------------------
     // build buttons
     // ----------------------------------------
+
     applyAutofills.appendChild(applyIcon.cloneNode(false));
     applyAutofillsShort.appendChild(applyIcon.cloneNode(false));
     applyAutofillsShort.appendChild(buttonText);
@@ -486,9 +496,11 @@ var Autofill = (function () {
     highlightAutofillsButt.appendChild(highlightIcon);
     // attach button icon
     replaceAutofillsButt.appendChild(replaceIcon);
+
     // ----------------------------------------
     // build mode container
     // ----------------------------------------
+
     modeContainer.appendChild(modeTitle);
     modeContainer.appendChild(replaceAutofillsButt);
     modeContainer.appendChild(highlightAutofillsButt);
@@ -506,9 +518,11 @@ var Autofill = (function () {
     minimizeList.classList.add('minimizeList');
     minimizeList.title = 'Show Tool';
     minimizeList.innerHTML = 'Autofill Tool<br><i class="fas fa-eye fa-lg"></i>';
+
     // ----------------------------------------
     // build autofill tab
     // ----------------------------------------
+
     autofillTab.appendChild(minimizeList);
 
     // *********************************************
@@ -518,14 +532,15 @@ var Autofill = (function () {
     let autofillToolContainer = document.createElement('div');
     autofillToolContainer.id = 'autofillToolContainer';
     autofillToolContainer.classList.add('hide');
+
     // ----------------------------------------
     // build autofillToolContainer
     // ----------------------------------------
+
     autofillToolContainer.appendChild(applyAutofills);
     autofillToolContainer.appendChild(messageDisplay);
     autofillToolContainer.appendChild(autofillOptionsContainer);
     autofillToolContainer.appendChild(modeContainer);
-
     autofillToolContainer.appendChild(defaultReset);
     autofillToolContainer.appendChild(addButton);
     autofillToolContainer.appendChild(autofillDropdown);
@@ -537,15 +552,19 @@ var Autofill = (function () {
     // Wrapper
     let autofillTool = document.createElement('div');
     autofillTool.id = 'autofillTool';
+
     // ----------------------------------------
     // build autofillTool
     // ----------------------------------------
+
     autofillTool.appendChild(autofillToolContainer);
     autofillTool.appendChild(autofillTab);
     autofillTool.appendChild(applyAutofillsShort);
+
     // ----------------------------------------
     // attach tool elements to page
     // ----------------------------------------
+
     document.body.appendChild(autofillTool);
 
     // ******************************************************************************************
@@ -576,69 +595,13 @@ var Autofill = (function () {
     function iconClass() {
         // declare local variable
         let toolSettings = shared.programData();
-        let buttonIcon;
-
+        // return class text depending on current ACTIVE MODE
         switch (toolSettings.mode) {
             case 'replace':
-                buttonIcon = replaceIconClass;
-                break;
+                return replaceIconClass;
             case 'highlight':
-                buttonIcon = highlightIconClass;
-                break;
+                return highlightIconClass;
         }
-        return buttonIcon;
-    }
-
-    /**
-     *   Build APPLY buttons
-     *  @param {string} modeText - the current ACTIVE mode
-     */
-    function buildButtons(modeText) {
-        // decalre local variables
-        let applyButtons = document.getElementsByClassName('applyAutofills');
-        let length = applyButtons.length;
-        // loop through buttom DOM elements and change to correct MODE TEXT
-        for (let y = 0; y < length; y += 1) {
-            // apply the correct class to the button, this controls the coloring of the button
-            applyButtons[y].classList.add(modeText);
-            // apply the correct MODE ICON to button
-            applyButtons[y].querySelector('i').classList.add(iconClass());
-            // Change ONLY the quick access button text
-            if (applyButtons[y].classList.contains('quickAccess')) {
-                applyButtons[y].querySelector('div.inline').innerHTML = modeText;
-            }
-        }
-    }
-
-    // ----------------------------------------
-    // ----------------------------------------
-    /**
-     *   Update main tool function button
-     */
-    function updateRunButtons(mode) {
-        // create icon data text
-        let iconClassText = iconClass();
-        let start = iconClassText.indexOf('-') + 1;
-        let dataText = iconClassText.substring(start);
-        let applyButtons = document.querySelectorAll('button.applyAutofills');
-        let length = applyButtons.length;
-
-        for (let y = 0; y < length; y += 1) {
-            let currentApplyButton = applyButtons[y];
-            currentApplyButton.dataset.mode = mode;
-            currentApplyButton.querySelector('svg[data-icon]').dataset.icon = dataText;
-            if (currentApplyButton.querySelector('div.inline')) {
-                currentApplyButton.querySelector('div.inline').innerHTML = shared.getValue('mode');
-            }
-        }
-        // update QUICK ACCESS button
-        //        applyAutofillsShort.dataset.mode = mode;
-        //        applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
-        //        applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
-
-        // update MAIN TOOL button
-        //        applyAutofills.dataset.mode = mode;
-        //        applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
     }
 
     /**
@@ -673,7 +636,7 @@ var Autofill = (function () {
      */
     function setRunButtons(mode) {
         // define local variables
-        let iconClassText = iconClass();    // get the FONT AWESOME icon class for the mode
+        let iconClassText = iconClass(); // get the FONT AWESOME icon class for the mode
         let applyButtons = document.querySelectorAll('button.applyAutofills');
         let length = applyButtons.length;
         // loop through all APPLY Buttons in tool
@@ -692,8 +655,7 @@ var Autofill = (function () {
             }
         }
     }
-    // ----------------------------------------
-    // ----------------------------------------
+
     /**
      *   Load local tool settings
      *   Mode : Replace or Highlight
@@ -702,16 +664,15 @@ var Autofill = (function () {
         // declare local variable
         let toolSettings = shared.programData();
         // change actions depending IF there is LOCAL DATA stored on users computer
-        if (Object.keys(toolSettings).length > 0) { // if LOCAL DATA IS FOUND
-            let activeMode = toolSettings.mode;
-            activateMode(activeMode);
-            setRunButtons(activeMode);
-        } else { // if LOCAL DATA IS NOT FOUND, ie running the tool for the first time.
-            // set REPALCER as ACTIVE mode
-            replaceAutofillsButt.classList.add('active');
+        let activeMode = toolSettings.mode || 'replace';
+        // if local data isn't found, save the default mode
+        if (Object.keys(toolSettings).length === 0) {
             // save MODE in local storage
-            shared.saveValue('mode', 'replace');
+            shared.saveValue('mode', activeMode);
         }
+        // update tool elements
+        activateMode(activeMode);
+        setRunButtons(activeMode);
     }
 
     /**
@@ -740,7 +701,6 @@ var Autofill = (function () {
             defaultList['%CITY%'] = myDiv.querySelector('input#contact_address_city').value;
             defaultList['%STATE_FULL_NAME%'] = myDiv.querySelector('select#contact_address_state').value;
             defaultList['%ZIP%'] = myDiv.querySelector('input#contact_address_postalCode').value;
-            //            defaultList['%PHONE%'] = myDiv.querySelector('input[name="contact_phone_number"]').value;
         }, 'html');
     }
 
@@ -1699,8 +1659,6 @@ var Autofill = (function () {
         // update MAIN TOOL button
         applyAutofills.dataset.mode = mode;
         applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
-        //            applyAutofills.classList.toggle('replace');
-        //        applyAutofills.classList.toggle('highlight');
 
         // update Autofill button onclick event
         checkModes();
@@ -1722,9 +1680,7 @@ var Autofill = (function () {
      *   Elements go from <i> to <svg> elements
      */
     function attachClickActions() {
-        //        replaceAutofillsButt.onclick = replaceModeActions;
         replaceAutofillsButt.onclick = modeAction;
-        //        highlightAutofillsButt.onclick = highlightModeActions;
         highlightAutofillsButt.onclick = modeAction;
     }
 
@@ -1762,6 +1718,7 @@ var Autofill = (function () {
     // RUN TOOL
     // ****************************************
     // ----------------------------------------
+
     styleTools();
     defaultValues();
     defaultPhoneNumber();
@@ -1779,34 +1736,7 @@ var Autofill = (function () {
 
     let sortable = Sortable.create(autofillOptionsList, {
         'group': 'autofillOptions',
-        //        'delay': 0,
-        //        'sort': true,
         'handle': '.my-handle',
-        //        'chosenClass': 'chosen',
-        //        'animation': 150,
-        // Element dragging started
-        //        'onStart': function () {
-        //        'onStart': function (evt) {
-        //            console.log('onstart');
-        //            console.log(evt);
-        //            console.log(evt.oldIndex); // element index within parent
-        //        },
-        // Changed sorting within list
-        //        'onUpdate': function (evt) {
-        //            console.log('onUpdate');
-        //            console.log(evt);
-        // same properties as onEnd
-        //        },
-        // Element dragging ended
-        //        'onEnd': function (evt) {
-        //            console.log('onEnd');
-        //            let itemEl = evt.item; // dragged HTMLElement
-        //            console.log(itemEl); // target list
-        //            console.log(evt.to); // target list
-        //            console.log(evt.from); // previous list
-        //            console.log(evt.oldIndex); // element's old index within old parent
-        //            console.log(evt.newIndex); // element's new index within new parent
-        //        },
         'store': {
             /**
              * Get the order of elements. Called once during initialization.
@@ -1814,11 +1744,6 @@ var Autofill = (function () {
              * @returns {Array}
              */
             'get': function (sortable) {
-                //                console.log('get');
-                //                        console.log(this);
-                //            'get': function (sortable) {
-
-                //                let order = localStorage.getItem(this.options.group.name);
                 let order = localStorage.getItem(sortable.options.group.name);
                 return order ? order.split('|') : [];
             },
@@ -1828,14 +1753,9 @@ var Autofill = (function () {
              * @param {Sortable}  sortable
              */
             'set': function (sortable) {
-                //            'set': function (sortable) {
-                //                console.log('set');
-
                 let order;
                 if (typeof Storage !== 'undefined') {
-                    //                    order = this.toArray();
                     order = sortable.toArray();
-                    //                    localStorage.setItem(this.options.group.name, order.join('|'));
                     localStorage.setItem(sortable.options.group.name, order.join('|'));
                 } else {
                     // Sorry! No Web Storage support..
@@ -1848,7 +1768,6 @@ var Autofill = (function () {
          */
         'onFilter': function (evt) {
 
-            //            console.log('onfilter');
             let item = evt.item;
             let ctrl = evt.target;
 
@@ -1863,17 +1782,12 @@ var Autofill = (function () {
                 jQuery(messageDisplay).animateCss('bounceIn');
 
                 // Save state
-                //                sortable.save();
-                //                this.save();
                 saveToLocalStorage(createArray());
                 removeDisable(item);
             }
         },
         // Called by any change to the list (add / update / remove)
         'onSort': function (evt) {
-
-            //            console.log(evt);
-            //            console.log('changing values');
 
             // update display message
             messageDisplay.textContent = 'Values Saved';
