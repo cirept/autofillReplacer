@@ -723,6 +723,25 @@ var Autofill = (function () {
     }
 
     /**
+     *   Check to see if the currently viewed site matches the web id saved to memory
+     *   This will allow the tool to auto reset to the contact information for the NEW
+     *   dealer site.
+     */
+    function checkWebID() {
+        debugger;
+        let webID = document.getElementById('siWebId').querySelector('label.displayValue').textContent;
+
+        let savedWebID = shared.getValue('webID');
+
+        if (!savedWebID || savedWebID.indexOf(webID) === 0) {
+            console.log('new webid');
+            resetValues(true);
+        } else {
+            console.log('same webid');
+        }
+    }
+
+    /**
      *   Get default dealer information for site
      */
     function defaultValues() {
@@ -730,6 +749,10 @@ var Autofill = (function () {
         defaultContactInformation();
         // get default phone number
         defaultPhoneNumber();
+        // check if on new site
+        //        checkWebID();
+        // reset values
+        //        resetValues();
     }
 
     /**
@@ -1023,10 +1046,22 @@ var Autofill = (function () {
 
     /**
      * Reset configured autofill tags to the default list
+     *  @param {bool} skipConfirm - determines if a confirm window should appear before value reset
      */
-    function resetValues() {
+    function resetValues(skipConfirm) {
+        // declare local variables
+        let userAnswer;
+        // set default value for skipConfirm
+        skipConfirm = typeof skipConfirm == Boolean ? skipConfirm : false;
+        // request user input?
+        skipConfirm ? userAnswer = true : userAnswer = window.confirm('Reset Values?');
+//        if (skipConfirm) {
+//            userAnswer = true;
+//        } else {
+//            userAnswer = window.confirm('Reset Values?');
+//        }
 
-        if (window.confirm('Reset Values?')) {
+        if (userAnswer) {
             // erase current list
             autofillOptionsList.innerHTML = '';
             // remove stored variables from memory
@@ -1140,17 +1175,17 @@ var Autofill = (function () {
 
     /**
      * Replace text on a CMS style input window
-     * @param {array} recordEditWindow - array of DOM input elements
+     * @param {array} $recordEditWindow - array of DOM input elements
      * @param {regex} regReplace - list of regex values
      */
-    function replaceTextCMS(recordEditWindow, regReplace) {
+    function replaceTextCMS($recordEditWindow, regReplace) {
         // pass elements with children as base element for autofill replacing
-        useAutofillTags(recordEditWindow, regReplace);
+        useAutofillTags($recordEditWindow, regReplace);
 
         // change focus between text area to trigger text saving.
-        let recordLendth = recordEditWindow.length;
+        let recordLendth = $recordEditWindow.length;
         for (let z = 0; z < recordLendth; z += 1) {
-            jQuery(recordEditWindow[z]).focus();
+            $recordEditWindow[z].focus();
         }
     }
 
@@ -1161,12 +1196,12 @@ var Autofill = (function () {
     function autofills() {
         // WSM MAIN WINDOW LOGIC
 
-        const contentFrame = jQuery('iframe#cblt_content').contents();
-        let siteEditorIframe = contentFrame.find('iframe#siteEditorIframe').contents();
-        let viewerIframe;
-        let cmsIframe;
+        const $contentFrame = jQuery('iframe#cblt_content').contents();
+        let $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents();
+        let $viewerIframe;
+        let $cmsIframe;
         let myChild;
-        let recordEditWindow;
+        let $recordEditWindow;
         let regReplace = getFromLocalStorage(); // get stored autofill tags from local storage
 
         // minimize tool
@@ -1175,23 +1210,23 @@ var Autofill = (function () {
         }
 
         // run CMS Content Pop Up edit window IF WINDOW IS OPEN
-        if (location.pathname.indexOf('editSite') >= 0 && siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
+        if (location.pathname.indexOf('editSite') >= 0 && $siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
 
             // save contents of cms content edit frame
-            cmsIframe = siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
+            $cmsIframe = $siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
 
             // if quick CMS editor is open
-            recordEditWindow = cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
+            $recordEditWindow = $cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
 
             // pass elements with children as base element for autofill replacing
-            replaceTextCMS(recordEditWindow, regReplace);
-        } else if (location.pathname.indexOf('editSite') >= 0 && !siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
+            replaceTextCMS($recordEditWindow, regReplace);
+        } else if (location.pathname.indexOf('editSite') >= 0 && !$siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
 
             // get contens of iframe
-            viewerIframe = siteEditorIframe.find('iframe#viewer').contents();
+            $viewerIframe = $siteEditorIframe.find('iframe#viewer').contents();
 
             // return array of elements that have children
-            myChild = viewerIframe.find('body').children().filter(function (index, value) {
+            myChild = $viewerIframe.find('body').children().filter(function (index, value) {
                 if (value.children.length !== 0) {
                     return this;
                 }
@@ -1204,10 +1239,10 @@ var Autofill = (function () {
             // ---------------------------------------- CMS LOGIC
 
             // get contens of iframe
-            recordEditWindow = contentFrame.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
+            $recordEditWindow = $contentFrame.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
 
             // pass elements with children as base element for autofill replacing
-            replaceTextCMS(recordEditWindow, regReplace);
+            replaceTextCMS($recordEditWindow, regReplace);
         }
     }
 
@@ -1307,15 +1342,15 @@ var Autofill = (function () {
     function highlights() {
         // WSM MAIN WINDOW LOGIC
 
-        const contentFrame = jQuery('iframe#cblt_content').contents();
+        const $contentFrame = jQuery('iframe#cblt_content').contents();
         // this contains all the content seen when in the "Editor" tab
-        let siteEditorIframe = contentFrame.find('iframe#siteEditorIframe').contents();
+        let $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents();
         // this will contain the actual page content
-        let viewerIframe; // = siteEditorIframe.find('iframe#viewer');
-        let viewerIframeContents; // = siteEditorIframe.find('iframe#viewer').contents();
-        let cmsIframe;
+        let $viewerIframe; // = $siteEditorIframe.find('iframe#viewer');
+        let viewerIframeContents; // = $siteEditorIframe.find('iframe#viewer').contents();
+        let $cmsIframe;
         let myChild;
-        let recordEditWindow;
+        let $recordEditWindow;
         let regReplace = getFromLocalStorage(); // get stored autofill tags from local storage
 
         // minimize tool
@@ -1324,22 +1359,22 @@ var Autofill = (function () {
         }
 
         // run AUTOFILL replace IF THE CMS Content Pop Up edit window IF WINDOW IS OPEN
-        if (location.pathname.indexOf('editSite') >= 0 && siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
+        if (location.pathname.indexOf('editSite') >= 0 && $siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
 
             // save contents of cms content edit frame
-            cmsIframe = siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
+            $cmsIframe = $siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
 
             // if quick CMS editor is open
-            recordEditWindow = cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
+            $recordEditWindow = $cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
 
             // pass elements with children as base element for autofill replacing
-            replaceTextCMS(recordEditWindow, regReplace);
+            replaceTextCMS($recordEditWindow, regReplace);
 
             // run AUTOFILL replace IF THE CMS Content Pop Up edit window IF WINDOW IS OPEN
-        } else if (location.pathname.indexOf('editSite') >= 0 && !siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
+        } else if (location.pathname.indexOf('editSite') >= 0 && !$siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
 
             // this will contain the actual page content
-            viewerIframe = siteEditorIframe.find('iframe#viewer');
+            $viewerIframe = $siteEditorIframe.find('iframe#viewer');
 
             // attach custom highlight styles inside iFrame page
             let highlightStyles = `
@@ -1353,12 +1388,12 @@ var Autofill = (function () {
             myHighlightStyles.innerHTML = highlightStyles;
 
             // Bind iFrame onload event
-            viewerIframe[0].onload = function () {
+            $viewerIframe[0].onload = function () {
 
                 // store iframe page contents
-                siteEditorIframe = contentFrame.find('iframe#siteEditorIframe').contents();
-                viewerIframe = siteEditorIframe.find('iframe#viewer');
-                viewerIframeContents = siteEditorIframe.find('iframe#viewer').contents();
+                $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents();
+                $viewerIframe = $siteEditorIframe.find('iframe#viewer');
+                $viewerIframeContents = $siteEditorIframe.find('iframe#viewer').contents();
 
                 // attach styles to page
                 viewerIframeContents.find('head').append(myHighlightStyles);
@@ -1374,7 +1409,7 @@ var Autofill = (function () {
                 highlightAutofillTags(myChild, regReplace);
             };
 
-            viewerIframe[0].src = viewerIframe[0].src + '&disableAutofill=true';
+            $viewerIframe[0].src = $viewerIframe[0].src + '&disableAutofill=true';
 
         } else if (location.pathname.indexOf('cms') >= 0) {
             // ---------------------------------------- CMS LOGIC
@@ -1692,20 +1727,6 @@ var Autofill = (function () {
 
     // ----------------------------------------
     // ****************************************
-    // RUN TOOL
-    // ****************************************
-    // ----------------------------------------
-
-    defaultValues(); // get default contact information
-    styleTools(); // inject tool styles
-    getAutofillList(); // build drop down menu
-    loadToolSettings(); // load tool settings from memory
-    bindApplyButtonAction();
-    buildAutofillOptions();
-    bindElementEvents();
-
-    // ----------------------------------------
-    // ****************************************
     // SORTABLE
     // ****************************************
     // ----------------------------------------
@@ -1774,5 +1795,19 @@ var Autofill = (function () {
             saveToLocalStorage(createArray());
         },
     });
+
+    // ----------------------------------------
+    // ****************************************
+    // RUN TOOL
+    // ****************************************
+    // ----------------------------------------
+
+    defaultValues(); // get default contact information
+    styleTools(); // inject tool styles
+    getAutofillList(); // build drop down menu
+    loadToolSettings(); // load tool settings from memory
+    bindApplyButtonAction();
+    buildAutofillOptions();
+    bindElementEvents();
 
 })();
