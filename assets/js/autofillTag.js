@@ -303,7 +303,7 @@ var Autofill = (function () {
     }
 
     // ******************************************************************************************
-    // TAMPERMONKEY FUNCTIONS
+    // TAMPERMONKEY FUNCTIONS / GLOBALs
     // ******************************************************************************************
 
     let shared = {
@@ -349,21 +349,15 @@ var Autofill = (function () {
 
             return varList;
         },
+        // autofill list
+        'myURL': 'https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json',
+        // font awesome icon for highlight
+        'highlightIconClass': 'fa-lightbulb',
+        // font awesome icon for replace
+        'replaceIconClass': 'fa-exchange',
+        // default dealer contact information
+        'defaultList': {},
     };
-
-    // ******************************************************************************************
-    // TOOL "GLOBAL" VARIABLES
-    // ******************************************************************************************
-
-    let myURL = 'https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json';
-    let defaultList = {};
-
-    // ----------------------------------------
-    // designated FA class for tool modes
-    // ----------------------------------------
-
-    const highlightIconClass = 'fa-lightbulb';
-    const replaceIconClass = 'fa-exchange';
 
     // ******************************************************************************************
     // AUTOFILL TOOL ELEMENTS - START
@@ -438,7 +432,7 @@ var Autofill = (function () {
     applyAutofillsShort.classList.add('applyAutofills', 'myButts', 'quickAccess', 'hide');
     applyAutofillsShort.type = 'button';
     applyAutofillsShort.dataset.mode = '';
-    applyAutofillsShort.title = 'apply autofills';
+    applyAutofillsShort.title = 'do magic';
     // Add APPLY button Icon
     let applyIcon = document.createElement('i');
     applyIcon.classList.add('fas', 'fa-lg', 'fa-fw', 'inline');
@@ -486,11 +480,11 @@ var Autofill = (function () {
     highlightAutofillsButt.type = 'button';
     // highlight button Icon
     let highlightIcon = document.createElement('i');
-    highlightIcon.classList.add('fas', 'fa-lg', highlightIconClass);
+    highlightIcon.classList.add('fas', 'fa-lg', shared.highlightIconClass);
     highlightIcon.setAttribute('data-fa-transform', 'shrink-3');
     // Exchange Icon
     let replaceIcon = document.createElement('i');
-    replaceIcon.classList.add('fas', 'fa-lg', replaceIconClass);
+    replaceIcon.classList.add('fas', 'fa-lg', shared.replaceIconClass);
     replaceIcon.setAttribute('data-fa-transform', 'shrink-3');
     // attach button icon
     highlightAutofillsButt.appendChild(highlightIcon);
@@ -598,9 +592,9 @@ var Autofill = (function () {
         // return class text depending on current ACTIVE MODE
         switch (toolSettings.mode) {
             case 'replace':
-                return replaceIconClass;
+                return shared.replaceIconClass;
             case 'highlight':
-                return highlightIconClass;
+                return shared.highlightIconClass;
         }
     }
 
@@ -620,13 +614,7 @@ var Autofill = (function () {
             // activate mode button
             if (currentModeButton.dataset.mode === mode) {
                 currentModeButton.classList.add('active');
-                currentModeButton.title = currentModeButton.title + '*active*';
             }
-            // remove *active* text from title
-            // find *active* text
-            let buttonTitle = modeButtons[y].title;
-            let startHere = buttonTitle.indexOf('*active*');
-            buttonTitle = buttonTitle.substring(0, startHere);
         }
     }
 
@@ -637,6 +625,8 @@ var Autofill = (function () {
     function setRunButtons(mode) {
         // define local variables
         let iconClassText = iconClass(); // get the FONT AWESOME icon class for the mode
+        let start = iconClassText.indexOf('-') + 1; // find where the hyphen starts
+        let dataText = iconClassText.substring(start); // get the only the icon name
         let applyButtons = document.querySelectorAll('button.applyAutofills');
         let length = applyButtons.length;
         // loop through all APPLY Buttons in tool
@@ -647,7 +637,11 @@ var Autofill = (function () {
             currentApplyButton.dataset.mode = mode;
             // set icon class in <i> element for activated mode, can only change icons like this
             // when initializing the tool.  After tool has been built, targeting the svg element is required.
-            currentApplyButton.querySelector('i.fas').classList.add(iconClassText);
+            if (document.readyState === 'complete') {
+                currentApplyButton.querySelector('svg[data-icon]').dataset.icon = dataText;
+            } else {
+                currentApplyButton.querySelector('i.fas').classList.add(iconClassText);
+            }
             // specifically for the "quick access" button
             if (currentApplyButton.querySelector('div.inline')) {
                 // update text inside button
@@ -676,12 +670,14 @@ var Autofill = (function () {
     }
 
     /**
-     * Get data from 'Settings' to autofill into the defaults list
+     * Get data from 'Settings' to autofill into the defaults list via ajax request
      */
-    function defaultValues() {
+    function defaultContactInformation() {
+
         // declare local variables
         let webID = document.getElementById('siWebId').querySelector('label.displayValue').textContent;
         let siteSettingsURL = `editSiteSettings.do?webId=${webID}&locale=en_US&pathName=editSettings`;
+
         // get information from SETTINGS TAB in WSM
         jQuery.get(siteSettingsURL, function (data) {
             // create a DOM element to store the data received from the SETTINGS TAB
@@ -695,34 +691,45 @@ var Autofill = (function () {
                 myFranchises.push(franchises[x].textContent);
             }
             // store data in tool defaultList array
-            defaultList['%DEALER_NAME%'] = myDiv.querySelector('input[name="name"]').value;
-            defaultList['%FRANCHISES%'] = myFranchises.join(', ');
-            defaultList['%STREET%'] = myDiv.querySelector('input#contact_address_street1').value;
-            defaultList['%CITY%'] = myDiv.querySelector('input#contact_address_city').value;
-            defaultList['%STATE_FULL_NAME%'] = myDiv.querySelector('select#contact_address_state').value;
-            defaultList['%ZIP%'] = myDiv.querySelector('input#contact_address_postalCode').value;
+            shared.defaultList['%DEALER_NAME%'] = myDiv.querySelector('input[name="name"]').value;
+            shared.defaultList['%FRANCHISES%'] = myFranchises.join(', ');
+            shared.defaultList['%STREET%'] = myDiv.querySelector('input#contact_address_street1').value;
+            shared.defaultList['%CITY%'] = myDiv.querySelector('input#contact_address_city').value;
+            shared.defaultList['%STATE_FULL_NAME%'] = myDiv.querySelector('select#contact_address_state').value;
+            shared.defaultList['%ZIP%'] = myDiv.querySelector('input#contact_address_postalCode').value;
         }, 'html');
     }
 
     /**
-     *   Get Phone Numbers from WSM Settings TAB
+     *   Get Phone Numbers from WSM Settings TAB  via ajax request
      */
     function defaultPhoneNumber() {
         // declare local variables
         let webID = document.getElementById('siWebId').querySelector('label.displayValue').textContent;
         let siteSettingsURL = `editDealerPhoneNumbers.do?webId=${webID}&locale=en_US&pathName=editSettings`;
+
         // get information from SETTINGS TAB in WSM
         jQuery.get(siteSettingsURL, function (data) {
             // create a DOM element to store the data received from the SETTINGS TAB
             let myDiv = document.createElement('div');
             myDiv.innerHTML = data;
             // store data in tool defaultList array
-            defaultList['%PHONE%'] = myDiv.querySelector('input[name*="(__primary_).ctn"]').value;
-            defaultList['%NEW_PHONE%'] = myDiv.querySelector('input[name*="(__new_).ctn"]').value;
-            defaultList['%USED_PHONE%'] = myDiv.querySelector('input[name*="(__used_).ctn"]').value;
-            defaultList['%SERVICE_PHONE%'] = myDiv.querySelector('input[name*="(__service_).ctn"]').value;
-            defaultList['%PARTS_PHONE%'] = myDiv.querySelector('input[name*="(__parts_).ctn"]').value;
+            shared.defaultList['%PHONE%'] = myDiv.querySelector('input[name*="(__primary_).ctn"]').value;
+            shared.defaultList['%NEW_PHONE%'] = myDiv.querySelector('input[name*="(__new_).ctn"]').value;
+            shared.defaultList['%USED_PHONE%'] = myDiv.querySelector('input[name*="(__used_).ctn"]').value;
+            shared.defaultList['%SERVICE_PHONE%'] = myDiv.querySelector('input[name*="(__service_).ctn"]').value;
+            shared.defaultList['%PARTS_PHONE%'] = myDiv.querySelector('input[name*="(__parts_).ctn"]').value;
         }, 'html');
+    }
+
+    /**
+     *   Get default dealer information for site
+     */
+    function defaultValues() {
+        // get default dealer information
+        defaultContactInformation();
+        // get default phone number
+        defaultPhoneNumber();
     }
 
     /**
@@ -898,10 +905,12 @@ var Autofill = (function () {
      * @param {object} obj - object to be saved into local storage
      */
     function getFromLocalStorage() {
+        // declare local variables
         let returnMe;
-        if (localStorage.getItem('autofillVariables') === null) {
-            //            console.log('autofill : no local data');
-            returnMe = defaultList;
+        let hello = localStorage.getItem('autofillVariables');
+        if (localStorage.getItem('autofillVariables') === null || Object.keys(hello).length === 0) {
+            //            console.log('autofill : local data not found');
+            returnMe = shared.defaultList;
         } else {
             //            console.log('autofill : local data found');
             returnMe = JSON.parse(localStorage.getItem('autofillVariables'));
@@ -915,30 +924,25 @@ var Autofill = (function () {
      * Will use data in local storage, if it exists
      */
     function buildAutofillOptions() {
-        // console.log('begin buildAutofillOptions');
+
         let regReplace = getFromLocalStorage();
         let listElement;
 
         // build autofill list options IF there is a list that already exists
-        if (regReplace) {
-            // console.log('in IF statement');
-            // loop through Legend Content list
-            for (let key in regReplace) {
+        // loop through Legend Content list
+        for (let key in regReplace) {
 
-                if (regReplace.hasOwnProperty(key)) {
-
-                    if (key === '') {
-                        continue;
-                    }
-                    // debugger;
-                    listElement = listItem(key, regReplace[key]);
-
-                    // attach to legend list
-                    autofillOptionsList.append(listElement);
-
-                    // bind list item elements
-                    bindTextChangeListener(listElement); // PROBLEM FUNCTION
+            if (regReplace.hasOwnProperty(key)) {
+                // skip if autofill Value is nothing
+                if (key === '') {
+                    continue;
                 }
+                // create list item for each saved value
+                listElement = listItem(key, regReplace[key]);
+                // attach to legend list
+                autofillOptionsList.append(listElement);
+                // bind list item elements
+                bindTextChangeListener(listElement); // PROBLEM FUNCTION
             }
         }
     }
@@ -1531,11 +1535,12 @@ var Autofill = (function () {
     }
 
     /**
-     * Start events to build the autofill 'drop down menu'
+     *  Start events to build the autofill 'drop down menu'
+     *  if fetchJSON fails, drop down menu will not be created.
      */
     function getAutofillList() {
 
-        fetchJSON(myURL).then((data) => {
+        fetchJSON(shared.myURL).then((data) => {
             console.log('autofill : autofill list loaded.');
             addButton.onclick = addButtonEventListener(true);
             // build out drop down menu
@@ -1574,20 +1579,21 @@ var Autofill = (function () {
 
     /**
      *   Check which mode is currently selected
-     *   This will determine what action is run when the user clicks the MAGIC ICON button
+     *   This will determine what action is run when the user clicks the APPLY button
      */
-    function checkModes() {
+    function bindApplyButtonAction() {
         // store all copies of the apply autofill button
         let applyButtons = document.getElementsByClassName('applyAutofills');
-
-        // update onclick callback depending on the CURRENT MODE
-        if (replaceAutofillsButt.classList.contains('active')) {
-            for (let x = 0; x < applyButtons.length; x += 1) {
-                applyButtons[x].onclick = autofills;
-            }
-        } else if (highlightAutofillsButt.classList.contains('active')) {
-            for (let x = 0; x < applyButtons.length; x += 1) {
-                applyButtons[x].onclick = highlights;
+        let activeMode = shared.getValue('mode');
+        // loop through each APPLY button and set click event
+        for (let x = 0; x < applyButtons.length; x += 1) {
+            switch (activeMode) {
+                case 'replace':
+                    applyButtons[x].onclick = autofills;
+                    break;
+                case 'highlight':
+                    applyButtons[x].onclick = highlights;
+                    break;
             }
         }
     }
@@ -1598,21 +1604,19 @@ var Autofill = (function () {
     function deactivateModes() {
         // save buttons found in mode container
         let modeButtons = modeContainer.querySelectorAll('button.modes');
-
         // define array length
         let length = modeButtons.length;
-
         // loop through buttons in mode container
         for (let y = 0; y < length; y += 1) {
             // toggle classes off
             modeButtons[y].classList.remove('active');
             modeButtons[y].classList.add('secondary');
-
             // remove *active* text from title
             // find *active* text
-            let buttonTitle = modeButtons[y].title;
-            let startHere = buttonTitle.indexOf('*active*');
-            buttonTitle = buttonTitle.substring(0, startHere);
+            if (modeButtons[y].title.indexOf('*active*') > -1) {
+                let endHere = modeButtons[y].title.indexOf('*active*');
+                modeButtons[y].title = modeButtons[y].title.substring(0, endHere);
+            }
         }
 
     }
@@ -1622,46 +1626,19 @@ var Autofill = (function () {
      *   Will turn ACTIVATE clicked button and DEACTIVATE all other buttons
      *   @param {string} mode = the mode that was selected (replace, highlight)
      */
-    function modeAction() {
+    function changeMode() {
         // get MODE of button that was clicked
         let mode = this.dataset.mode;
-
         // save MODE in local storage
         shared.saveValue('mode', mode);
-
         // reset all mode buttons
         deactivateModes();
-
-        // activate clicked MODE button
-        let activateButton = modeContainer.querySelector(`button[data-mode=${mode}]`);
-        activateButton.classList.add('active');
-        activateButton.classList.remove('secondary');
-        activateButton.title += ' *active*';
-
-        // save title
-        let title = applyAutofillsShort.title;
-        // Switch START FUNCTION imagery
-        if (title.indexOf('*Replace*') > -1) {
-            let start = title.indexOf(' ');
-            title = title.substring(start);
-        }
-
-        // create icon data text
-        let iconClassText = iconClass();
-        let start = iconClassText.indexOf('-') + 1;
-        let dataText = iconClassText.substring(start);
-
-        // update QUICK ACCESS button
-        applyAutofillsShort.dataset.mode = mode;
-        applyAutofillsShort.querySelector('svg[data-icon]').dataset.icon = dataText;
-        applyAutofillsShort.querySelector('div.inline').innerHTML = shared.getValue('mode');
-
-        // update MAIN TOOL button
-        applyAutofills.dataset.mode = mode;
-        applyAutofills.querySelector('svg[data-icon]').dataset.icon = dataText;
-
+        // activate CLICKED button
+        activateMode(mode);
+        // update RUN buttons
+        setRunButtons(mode);
         // update Autofill button onclick event
-        checkModes();
+        bindApplyButtonAction();
     }
 
     /**
@@ -1680,8 +1657,8 @@ var Autofill = (function () {
      *   Elements go from <i> to <svg> elements
      */
     function attachClickActions() {
-        replaceAutofillsButt.onclick = modeAction;
-        highlightAutofillsButt.onclick = modeAction;
+        replaceAutofillsButt.onclick = changeMode;
+        highlightAutofillsButt.onclick = changeMode;
     }
 
     /**
@@ -1719,13 +1696,12 @@ var Autofill = (function () {
     // ****************************************
     // ----------------------------------------
 
-    styleTools();
-    defaultValues();
-    defaultPhoneNumber();
+    defaultValues(); // get default contact information
+    styleTools(); // inject tool styles
+    getAutofillList(); // build drop down menu
+    loadToolSettings(); // load tool settings from memory
+    bindApplyButtonAction();
     buildAutofillOptions();
-    getAutofillList();
-    loadToolSettings();
-    checkModes();
     bindElementEvents();
 
     // ----------------------------------------
