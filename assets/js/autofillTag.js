@@ -750,7 +750,7 @@ var Autofill = (function () {
         // get default phone number
         defaultPhoneNumber();
         // check if on new site
-        //        checkWebID();
+//                checkWebID();
         // reset values
         //        resetValues();
     }
@@ -1052,14 +1052,14 @@ var Autofill = (function () {
         // declare local variables
         let userAnswer;
         // set default value for skipConfirm
-        skipConfirm = typeof skipConfirm == Boolean ? skipConfirm : false;
+        skipConfirm = typeof skipConfirm === Boolean ? skipConfirm : false;
         // request user input?
-        skipConfirm ? userAnswer = true : userAnswer = window.confirm('Reset Values?');
-//        if (skipConfirm) {
-//            userAnswer = true;
-//        } else {
-//            userAnswer = window.confirm('Reset Values?');
-//        }
+        //        skipConfirm ? userAnswer = true : userAnswer = window.confirm('Reset Values?');
+        if (skipConfirm) {
+            userAnswer = true;
+        } else {
+            userAnswer = window.confirm('Reset Values?');
+        }
 
         if (userAnswer) {
             // erase current list
@@ -1088,9 +1088,17 @@ var Autofill = (function () {
         let treeWalker = document.createTreeWalker(base, NodeFilter.SHOW_TEXT, null, false);
         let wordArray = [];
 
+        // loop through each TEXT NODE on the web page
         while (treeWalker.nextNode()) {
-            if (treeWalker.currentNode.nodeType === 3 && treeWalker.currentNode.textContent.trim() !== '') {
-                wordArray.push(treeWalker.currentNode);
+
+            let currentNode = treeWalker.currentNode;
+            let pElement = currentNode.parentElement;
+
+            // will get the computed style, as if seen in the web browser, of the parent element for the text node
+            // the if statement checks the 'display' css value and uses that to make a decision
+            // 2nd decision, checks to see if the text node is just whitespace (regex checks for consecutive whitepsace)
+            if (window.getComputedStyle(pElement).getPropertyValue('display') !== 'none' && currentNode.textContent.trim() !== '') {
+                wordArray.push(currentNode);
             }
         }
         return wordArray;
@@ -1102,12 +1110,15 @@ var Autofill = (function () {
      */
     function phoneNumberText(text) {
 
-        let phoneRegex = /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/g;
+        // phone number regex
+        let phoneRegex = /(\+?( |-|\.)?\d{1,2}( |-|\.)?)?(\(?\d{3}\)?|\d{3})( |-|\.)?(\d{3}( |-|\.)?\d{4})/g;
+        //        let phoneRegex = /((\(\d{3}\) ?)|(\d{3}-))?\d{3}-\d{4}/g;
 
         if (phoneRegex.test(text)) {
             return RegExp.escape(text);
         }
-        return '\\b' + RegExp.escape(text) + '\\b';
+        //        return '\\b' + RegExp.escape(text) + '\\b';
+        return RegExp.escape(text);
     }
 
     // --------------------------------------------------------------------------------
@@ -1254,64 +1265,84 @@ var Autofill = (function () {
      *   Replace markers with highlight span elemetns
      */
     function replaceMarkers(elm) {
+        // replaced markers with <span> elements for visual coloring
         if (elm) {
             elm.innerHTML = elm.innerHTML.replace(/~~@(.*?)@~~/g, '<span class="highlightMe">$1</span>');
         }
     }
 
     /**
+     *  Build regex expression
+     *  @param {array} regReplace - object array that contains the regExpressions and corresponding autofill tags
+     *  @return {regex} the regular expression with all of the search words combined
+     */
+    function buildRegex(regReplace) {
+        let combinedWords = ''; // declaring variable
+        let myLength = Object.keys(regReplace).length; // store number of object properties AKA length of object
+        let counter = 1; // counter to keep track of current object property we are working with
+
+        // iterate through autofill array and replace matches in text
+        for (let autofillTag in regReplace) {
+            // store REGEX value
+            let findMe = regReplace[autofillTag];
+
+            // if split phrases are needed
+            if (findMe.indexOf('``') > -1) {
+                // if combinedWords IS NOT EMPTY add a PIPE character
+                combinedWords += combinedWords ? '|' : '';
+                // create word array, sorted from longest to shortest
+                let findArray = findMe.split('``').sort((a, b) => {
+                    // ASC  -> a.length - b.length
+                    // DESC -> b.length - a.length
+                    return b.length - a.length;
+                });
+                // create an array of the combined search values
+                let arrayLength = findArray.length;
+                // loop through combined 'search values' string
+                for (let a = 0; a < arrayLength; a += 1) {
+                    // declare variables
+                    let searchText = findArray[a].trim();
+                    let findThis = phoneNumberText(searchText);
+                    // if the search text is blank skip
+                    if (findThis === '') {
+                        continue;
+                    }
+                    // append word
+                    combinedWords += findThis;
+                    // add a PIPE character if not the last word in the array
+                    combinedWords += a < arrayLength - 1 ? '|' : '';
+                }
+                // counter increment
+                counter += 1;
+            } else {
+                // if combinedWords IS NOT EMPTY add a PIPE character
+                combinedWords += combinedWords ? '|' : '';
+                // create regex insert
+                combinedWords += findMe;
+                // add a PIPE character if not the last word in the array
+                combinedWords += counter < myLength ? '|' : '';
+                // counter increment
+                counter += 1;
+            }
+        }
+        // create regex
+        return new RegExp(`(${combinedWords})`, 'gi');
+    }
+
+    /**
      * Replaced matching words/phrases with the corresponding autofill tags
      * @param {array} wordList - array containing all the visible text in the edit area
-     * @param {string} regReplace - text string to search for
+     * @param {regex} myRegex - regular expression used for finding the matches.
      */
-    function highlightText(wordList, regReplace) {
-
+    function highlightText(wordList, myRegex) {
+        // loop through each word list to find matches
         wordList.forEach(function (n) {
-
             let text = n.nodeValue;
             let elm = n.parentElement;
-
-            // iterate through autofill array and replace matches in text
-            // replace all instances of 'findMe' with 'autofillTag'
-            for (let autofillTag in regReplace) {
-                let findMe = regReplace[autofillTag];
-
-                // if text has already been flagged as a possible autofill, skip rechecking the text node
-                if (text.indexOf('~~@') === 0) {
-                    continue;
-                }
-
-                // if split phrases are needed
-                if (findMe.indexOf('``') > -1) {
-                    // declare local variables
-                    let findArray = findMe.split('``'); // create an array of the combined search values
-                    let arrayLength = findArray.length;
-
-                    // loop through combined 'search values' string
-                    for (let a = 0; a < arrayLength; a += 1) {
-                        // declare variables
-                        let searchText = findArray[a].trim();
-                        let findThis = phoneNumberText(searchText);
-                        let myRegex = new RegExp(findThis, 'gi');
-
-                        // if the search text is blank skip
-                        if (searchText === '') {
-                            continue;
-                        }
-
-                        // replace
-                        text = text.replace(myRegex, `~~@${searchText}@~~`); // replace with highlight span
-                    }
-                } else {
-                    // create regex variable
-                    let findThis = phoneNumberText(findMe);
-                    let myRegex = new RegExp(findThis, 'gi');
-                    text = text.replace(myRegex, `~~@${findMe}@~~`); // replace with highlight span
-                }
-            }
-
+            // replace matched values with flags
+            text = text.replace(myRegex, `~~@$&@~~`); // replace with highlight span
+            // save changes into node
             n.nodeValue = text;
-
             // replace markers
             replaceMarkers(elm);
         });
@@ -1323,14 +1354,16 @@ var Autofill = (function () {
      * @param {array} regReplace - object array that contains the regExpressions and corresponding autofill tags
      */
     function highlightAutofillTags(baseElem, regReplace) {
-
-        let wordList;
+        // declare loop length
         let baseLength = baseElem.length;
-
+        // create regex
+        let myRegex = buildRegex(regReplace);
+        // loop through base element
         for (let z = 0; z < baseLength; z += 1) {
             // get all visible text on page
-            wordList = treeWalk(baseElem[z]);
-            highlightText(wordList, regReplace);
+            let wordList = treeWalk(baseElem[z]);
+            // highlight matching words / phrases
+            highlightText(wordList, myRegex);
         }
     }
 
@@ -1341,41 +1374,24 @@ var Autofill = (function () {
      */
     function highlights() {
         // WSM MAIN WINDOW LOGIC
-
         const $contentFrame = jQuery('iframe#cblt_content').contents();
-        // this contains all the content seen when in the "Editor" tab
-        let $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents();
-        // this will contain the actual page content
-        let $viewerIframe; // = $siteEditorIframe.find('iframe#viewer');
-        let viewerIframeContents; // = $siteEditorIframe.find('iframe#viewer').contents();
-        let $cmsIframe;
-        let myChild;
-        let $recordEditWindow;
+        let $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents(); // this contains all the content seen when in the "Editor" tab
         let regReplace = getFromLocalStorage(); // get stored autofill tags from local storage
-
         // minimize tool
         if (!autofillToolContainer.classList.contains('hide')) {
             autofillTab.click();
         }
-
         // run AUTOFILL replace IF THE CMS Content Pop Up edit window IF WINDOW IS OPEN
         if (location.pathname.indexOf('editSite') >= 0 && $siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
-
             // save contents of cms content edit frame
-            $cmsIframe = $siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
-
+            let $cmsIframe = $siteEditorIframe.find('iframe#cmsContentEditorIframe').contents();
             // if quick CMS editor is open
-            $recordEditWindow = $cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
-
+            let $recordEditWindow = $cmsIframe.find('div.main-wrap').find('.input-field').find('div[data-which-field="copy"]');
             // pass elements with children as base element for autofill replacing
             replaceTextCMS($recordEditWindow, regReplace);
-
             // run AUTOFILL replace IF THE CMS Content Pop Up edit window IF WINDOW IS OPEN
         } else if (location.pathname.indexOf('editSite') >= 0 && !$siteEditorIframe.find('div#hiddenContentPopUpOuter').hasClass('opened')) {
-
-            // this will contain the actual page content
-            $viewerIframe = $siteEditorIframe.find('iframe#viewer');
-
+            let $viewerIframe = $siteEditorIframe.find('iframe#viewer'); // this will contain the actual page content
             // attach custom highlight styles inside iFrame page
             let highlightStyles = `
             .highlightMe {
@@ -1388,32 +1404,26 @@ var Autofill = (function () {
             myHighlightStyles.innerHTML = highlightStyles;
 
             // Bind iFrame onload event
-            $viewerIframe[0].onload = function () {
-
-                // store iframe page contents
-                $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents();
+            $viewerIframe[0].onload = () => {
+                $siteEditorIframe = $contentFrame.find('iframe#siteEditorIframe').contents(); // store iframe page contents
                 $viewerIframe = $siteEditorIframe.find('iframe#viewer');
-                $viewerIframeContents = $siteEditorIframe.find('iframe#viewer').contents();
-
+                let $viewerIframeContents = $siteEditorIframe.find('iframe#viewer').contents();
                 // attach styles to page
-                viewerIframeContents.find('head').append(myHighlightStyles);
-
+                $viewerIframeContents.find('head').append(myHighlightStyles);
                 // return array of elements that have children
-                myChild = viewerIframeContents.find('body').children().filter(function (index, value) {
+                let myChild = $viewerIframeContents.find('body').children().filter((index, value) => {
                     if (value.children.length !== 0) {
                         return this;
                     }
                 });
-
                 // pass elements with children as base element for autofill replacing
                 highlightAutofillTags(myChild, regReplace);
             };
-
+            // appened DISABLE autofill parameter to url
             $viewerIframe[0].src = $viewerIframe[0].src + '&disableAutofill=true';
 
         } else if (location.pathname.indexOf('cms') >= 0) {
             // ---------------------------------------- CMS LOGIC
-
             // alert user
             window.alert('Autofill Tool\nHighlight functionality does not work in the Content Library Tab');
         }
