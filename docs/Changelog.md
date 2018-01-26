@@ -1,5 +1,27 @@
 # Change Log
 
+## v2.0 - **(01/07/2018)**
+
+### Added Modes
+
+#### Replace Mode
+* The mode that everyone is already used to...
+* Words specified in autofill list area will get replaced with the autofill tags
+
+#### Highlight Mode
+* The tool will highlight all the text on the page that CAN BE CONVERTED TO AUTOFILL TAGS.
+* **In other words, a beefed up version of CTRL+F functionality.**
+* See documentation for details.
+
+### Other Changes
+* Removed 'reorder' anchor from autofill options list
+    * Researching if feature needs to be fixed.
+
+
+<br><br>
+
+---
+
 ## v1.1.0 - **(12/22/2017)**
 
 ### Additional support

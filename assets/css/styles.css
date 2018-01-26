@@ -1,0 +1,260 @@
+#autofillTool {
+    position: absolute;
+    top: 0;
+    left: 195px;
+    width: auto;
+    color: white;
+    font-size: 11px;
+    animation-duration: 1.5s;
+    -webkit-animation-duration: 1.5s;
+}
+
+#toolMessageDisplay {
+    display: inline-block;
+    width: 80%;
+    font-size: 13px;
+    text-align: center;
+    color: red;
+}
+
+#addAutofill {
+    width: 90%;
+    padding: 5px 30px;
+}
+
+.myButts {
+    background: #824FD6;
+    border-radius: 5px;
+    color: #fff;
+    border: 1px solid rgb(147, 143, 143);
+}
+
+.myButts:hover {
+    background: #793CC4;
+    cursor: pointer;
+    cursor: hand;
+}
+
+.applyAutofills {
+    display: inline-block;
+    padding: 5px 25px;
+    /*background: rgb(130, 198, 0);*/
+}
+
+.applyAutofills > * {
+    margin: 0 3px;
+}
+
+.applyAutofills > .inline {
+    display: inline;
+}
+
+.applyAutofills.disabled {
+    background: #333;
+}
+
+#modeContainer {
+    padding: 5px;
+    color: black;
+    background: rgb(234, 232, 232);
+    border-bottom-right-radius: 5px;
+}
+
+#autofillToolContainer {
+    background: rgb(234, 232, 232);
+    padding: 10px;
+    border-left: 1px solid rgb(130, 79, 214);
+    border-right: 1px solid rgb(130, 79, 214);
+    border-bottom: 1px solid rgb(130, 79, 214);
+}
+
+#autofillToolTab {
+    padding: 5px 0 10px 0;
+    text-align: center;
+    width: 100px;
+    display: inline-block;
+    font-size: 13px;
+    background: rgb(130, 79, 214);
+    border-radius: 0 0 50% 50%;
+    cursor: pointer;
+    cursor: hand;
+    animation-duration: .75s;
+    -webkit-animation-duration: .75s;
+}
+
+#autofillOptions {}
+
+#autofillOptionsContainer {
+    width: 450px;
+    border: 1px solid rgb(153, 153, 153);
+    margin: 5px 0;
+    padding: 5px 0;
+    text-align: center;
+}
+
+#autofillOptionsContainer > div {
+    color: rgb(153, 153, 153);
+    font-size: 14px;
+}
+
+.vertical {
+    position: absolute;
+    right: -51px;
+    width: 40px;
+    top: 55px;
+    border-top-right-radius: 5px;
+    border-top: 1px solid rgb(130, 79, 214);
+    border-bottom: 1px solid rgb(130, 79, 214);
+    border-right: 1px solid rgb(130, 79, 214);
+}
+
+.horizontal {
+    width: 115px;
+    top: 30px;
+    height: 50px;
+    text-align: center;
+}
+
+.modes {
+    margin: 5px 0;
+    padding: 5px;
+    width: 35px;
+}
+
+.horizontal .modes {
+    margin: 5px 10px;
+}
+
+.minimizeList {}
+
+#defaultReset {
+    position: relative;
+    float: right;
+    width: 10%;
+    padding: 5px;
+}
+
+.secondary {
+    background: rgb(234, 232, 232);
+    color: rgb(130, 79, 214);
+}
+
+.secondary:hover {
+    background: rgb(130, 79, 214);
+    color: rgb(234, 232, 232);
+}
+
+.my-handle {
+    border: 1px dotted #793CC4;
+    padding: 2px 6px 2px 5px;
+    cursor: move;
+    cursor: -webkit-grabbing;
+}
+
+.autofillTag {
+    display: inline-block;
+    text-align: center;
+    color: black;
+    word-wrap: break-word;
+    flex-grow: 1;
+}
+
+.regEx {
+    background: #793CC4;
+    color: #fff;
+    border: 1px solid rgb(255, 255, 255);
+    line-height: 1.25rem;
+    text-indent: 10px;
+    width: 175px !important;
+}
+
+.autofillEntry {
+    padding: 5px 10px;
+    border: 1px solid #793CC4;
+    margin: 3px 10px;
+    color: #793CC4;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.js-remove {
+    cursor: pointer;
+    cursor: hand;
+    padding: 0 0 0 10px;
+    display: inline-block;
+}
+
+.leftMarg {
+    margin: 0 0 0 15px;
+}
+
+.autofill-dropdown {
+    height: 400px;
+    width: 100%;
+    overflow: auto;
+    position: absolute;
+    background: #0A0808;
+    left: 0px;
+}
+
+.autofill-dropdown:focus {
+    outline: 0;
+}
+
+.autofill-dropdown li {
+    text-align: center;
+    font-size: 12px;
+    padding: 5px 0;
+}
+
+.autofill-dropdown li:hover {
+    background: rgba(121, 60, 196, .5);
+    cursor: pointer;
+    cursor: hand;
+}
+
+.hide {
+    display: none;
+}
+
+.disabled {
+    pointer-events: none;
+    background: rgba(0, 0, 0, .75);
+    cursor: no-drop;
+}
+
+.myError {
+    border: 1px solid red;
+}
+
+.chosen {
+    color: #fff;
+    background-color: rgb(130, 198, 0);
+}
+
+.active,
+.active:hover {
+    background: rgb(130, 198, 0);
+}
+
+.highlightMe {
+    background: yellow;
+}
+
+.quickAccess {
+    position: absolute;
+    font-size: 12px;
+    width: 100%;
+    padding: 5px 0;
+}
+
+.applyAutofills.replace,
+.active.replace {
+    background: rgb(130, 198, 0);
+}
+
+.applyAutofills.highlight,
+.active.highlight {
+    background: rgb(0, 153, 255);
+}
