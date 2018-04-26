@@ -10,6 +10,7 @@ var Autofill = (function () {
         '%STREET%': 'SEARCH_FOR_ME',
         '%CITY%': 'SEARCH_FOR_ME',
         '%STATE%': 'SEARCH_FOR_ME',
+        '%STATE_FULL_NAME%': 'SEARCH_FOR_ME',
         '%ZIP%': 'SEARCH_FOR_ME',
         '%PHONE%': 'SEARCH_FOR_ME',
         '%NEW_PHONE%': 'SEARCH_FOR_ME',
