@@ -3,8 +3,10 @@
 const Autofill = (function () {
   const myURL = "https://raw.githubusercontent.com/cirept/WSMupgrades/master/json/autofillTags2.json";
   const myStyles = GM_getResourceURL("toolStyles"); // Tampermonkey function
-  const lastestChanges = GM_getResourceURL("changeLog");
-  const toolInstructions = GM_getResourceURL("toolInstructions");
+  const lastestChanges = GM_getResourceURL("changeLog"); // Tampermonkey function
+  const webID = document.getElementById("_webId").value;
+  const locale = document.getElementById("_locale").value;
+  const toolInstructions = GM_getResourceURL("toolInstructions"); // Tampermonkey function
   const defaultList = {
     "***How to Seperate Words***": "Seperate words with --> ;",
     "***Example***": "*`*like*`*;*`*this*`*;*`*you*`*;*`*see*`*",
@@ -186,87 +188,170 @@ const Autofill = (function () {
    * Loads all the tool styles
    */
   const loadAutofillStyles = new Promise((resolve, reject) => {
-    // default styles
-    let autofillStyles = document.createElement("link");
-    autofillStyles.id = "autofill-styles";
-    autofillStyles.rel = "stylesheet";
-    autofillStyles.href = myStyles;
-    document.head.appendChild(autofillStyles);
-
-    // send resolve
-    resolve("Sucess!");
+    try {
+      // default styles
+      let autofillStyles = document.createElement("link");
+      autofillStyles.id = "autofill-styles";
+      autofillStyles.rel = "stylesheet";
+      autofillStyles.href = myStyles;
+      document.head.appendChild(autofillStyles);
+      // send resolve
+      resolve("Sucess!");
+    } catch (error) {
+      reject(error);
+    }
   });
 
   /**
-   * Get States name data from JSON file
+   * Gets the state JSON information
+   * Resolves an array of state objects with the name and abbreviations
    */
-  const getFullStateName = new Promise((resolve, reject) => {
-    const statesURL = "https://gist.githubusercontent.com/cirept/21be8036e544efcd6e934257f33862f1/raw/8b0dbb93521f5d6889502305335104218454c2bf/states_hash.json";
+  const getLocalAbbreviationInformation = new Promise((resolve, reject) => {
+    const options = {
+      url: `https://raw.githubusercontent.com/cirept/autofillReplacer/master/assets/json/locale_${locale}.json`,
+      dataType: "json"
+    };
+
     // get file data
-    jQuery.get(statesURL, () => {}, "json").done((data) => {
-      // return the STATE json object
-      resolve(data);
-    });
+    jQuery.ajax(options)
+      .done((data) => {
+        // return the STATE json object
+        resolve(data);
+      }).fail((error) => {
+        reject(error);
+      }).always();
   });
 
   /**
    * Get data from "Settings" to autofill into the defaults list
    */
   const getWebsiteGeneralInfo = new Promise((resolve, reject) => {
-    const webID = document.getElementById("siWebId").querySelector("label.displayValue").textContent;
-    const siteSettingsURL = `editSiteSettings.do?webId=${webID}&locale=en_US&pathName=editSettings`;
 
+    // path to open the website settings tab
+    const siteSettingsURL = `editSiteSettings.do?webId=${webID}&locale=${locale}&pathName=editSettings`;
+
+    // get website settings information
     jQuery.get(siteSettingsURL, (data) => {
-      const myDiv = document.createElement("div");
-      myDiv.innerHTML = data;
-      const franchises = myDiv.querySelector("select#associatedFranchises").options;
-      const myLength = franchises.length;
-      const myFranchises = [];
+        if (data) {
+          const myDiv = document.createElement("div");
+          myDiv.innerHTML = data;
+          const franchises = myDiv.querySelector("select#associatedFranchises").options;
+          const myLength = franchises.length;
+          const myFranchises = [];
 
-      // create franchises string
-      for (let x = 0; x < myLength; x += 1) {
-        myFranchises.push(franchises[x].textContent);
-      }
+          // create franchises string
+          for (let x = 0; x < myLength; x += 1) {
+            myFranchises.push(franchises[x].textContent);
+          }
+          // fill out autofill list with website settings information
+          defaultList["%DEALER_NAME%"] = myDiv.querySelector("input[name='name']").value || "SEARCH_FOR_ME";
+          defaultList["%STREET%"] = myDiv.querySelector("input#contact_address_street1").value || "SEARCH_FOR_ME";
+          defaultList["%CITY%"] = myDiv.querySelector("input#contact_address_city").value || "SEARCH_FOR_ME";
+          defaultList["%ZIP%"] = myDiv.querySelector("input#contact_address_postalCode").value || "SEARCH_FOR_ME";
+          defaultList["%STATE%"] = myDiv.querySelector("select#contact_address_state").value || "SEARCH_FOR_ME";
+          defaultList["%PHONE%"] = myDiv.querySelector("input[name='contact_phone_number']").value || "SEARCH_FOR_ME";
+          defaultList["%FRANCHISES%"] = myFranchises.join(", ") || "SEARCH_FOR_ME";
 
-      defaultList["%DEALER_NAME%"] = myDiv.querySelector("input[name='name']").value;
-      defaultList["%STREET%"] = myDiv.querySelector("input#contact_address_street1").value;
-      defaultList["%CITY%"] = myDiv.querySelector("input#contact_address_city").value;
-      defaultList["%ZIP%"] = myDiv.querySelector("input#contact_address_postalCode").value;
-      defaultList["%STATE%"] = myDiv.querySelector("select#contact_address_state").value;
-      defaultList["%PHONE%"] = myDiv.querySelector("input[name='contact_phone_number']").value;
-      defaultList["%FRANCHISES%"] = myFranchises.join(", ");
-    }, "html").done(() => {
-      // set the STATE_FULL_NAME to the states full name
-      getFullStateName.then((data) => {
-        defaultList["%STATE_FULL_NAME%"] = data[defaultList["%STATE%"]];
-        resolve("Success!");
+          // display confirmation message
+          log("Website Settings Information Loaded");
+
+          // resolve promise
+          resolve("Site Settings Loaded");
+        } else {
+          reject("Unable to get site settings.");
+        }
+      }, "html")
+      /**
+       * Once the Website Settings have been loaded, Start the process of finding the FULL STATE NAME of the
+       * STATE abbreviation
+       */
+      .done(() => {
+        /**
+         * Promise to get full state name from json files
+         */
+        const getFullState = new Promise((resolve, reject) => {
+          // consume promise and get the local abbreviation data
+          getLocalAbbreviationInformation.then((stateList) => {
+
+            // filter the array of states down to the matching state.
+            const filteredStates = stateList.filter((state) => {
+              const {
+                abbreviation
+              } = state;
+              return defaultList["%STATE%"] === abbreviation;
+            });
+            // display console message that no match was found
+            if (filteredStates.length > 1 || filteredStates.length < 1) {
+              // set value to the default value
+              log("Region not supported by the tool");
+            }
+            // set STATE FULL NAME to matched state
+            if (filteredStates.length === 1) {
+              defaultList["%STATE_FULL_NAME%"] = filteredStates[0].name;
+
+              // display confirmation message
+              log("State Full Name Loaded");
+            }
+            // resolve with success
+            resolve("Success!");
+          }, (error) => {
+            log("Get state full name failed", error.responseText);
+          });
+        });
+      })
+      .fail((error) => {
+        // reject(`unable to get site settings, ${error}`);
+        log("Failed to Load Website Settings", error);
+      })
+      .always(() => {
+        resolve();
       });
-    });
   });
 
   /**
-   *   Get Phone Numbers
+   *   Get Phone Numbers from website settings
    */
   const getWebsitePhoneNumbers = new Promise((resolve, reject) => {
+    // build website settings URL path
     const webID = document.getElementById("siWebId").querySelector("label.displayValue").textContent;
-    const siteSettingsURL = `editDealerPhoneNumbers.do?webId=${webID}&locale=en_US&pathName=editSettings`;
+    const siteSettingsURL = `editDealerPhoneNumbers.do?webId=${webID}&locale=${locale}&pathName=editSettings`;
 
     jQuery.get(siteSettingsURL, (data) => {
-      const myDiv = document.createElement("div");
-      myDiv.innerHTML = data;
-      defaultList["%PHONE%"] = myDiv.querySelector("input[name*='(__primary_).ctn']").value;
-      defaultList["%NEW_PHONE%"] = myDiv.querySelector("input[name*='(__new_).ctn']").value;
-      defaultList["%USED_PHONE%"] = myDiv.querySelector("input[name*='(__used_).ctn']").value;
-      defaultList["%SERVICE_PHONE%"] = myDiv.querySelector("input[name*='(__service_).ctn']").value;
-      defaultList["%PARTS_PHONE%"] = myDiv.querySelector("input[name*='(__parts_).ctn']").value;
-    }, "html").done(() => {
-      resolve("Success!");
-    });
+        const myDiv = document.createElement("div");
+        myDiv.innerHTML = data;
+        defaultList["%PHONE%"] = myDiv.querySelector("input[name*='(__primary_).ctn']").value || "SEARCH_FOR_ME";
+        defaultList["%NEW_PHONE%"] = myDiv.querySelector("input[name*='(__new_).ctn']").value || "SEARCH_FOR_ME";
+        defaultList["%USED_PHONE%"] = myDiv.querySelector("input[name*='(__used_).ctn']").value || "SEARCH_FOR_ME";
+        defaultList["%SERVICE_PHONE%"] = myDiv.querySelector("input[name*='(__service_).ctn']").value || "SEARCH_FOR_ME";
+        defaultList["%PARTS_PHONE%"] = myDiv.querySelector("input[name*='(__parts_).ctn']").value || "SEARCH_FOR_ME";
+      }, "html")
+      .done(() => {
+        log("Phone Numbers Loaded");
+      })
+      .fail(() => {
+        log("failed to get phone numbers");
+      })
+      .always(() => {
+        resolve();
+      });
   });
 
   // 
   // Functions
   // 
+
+  /**
+   * 
+   * @param {string} message - Message to write to the console.
+   * @param {object} obj - the object to display in the console message
+   */
+  function log(message, obj) {
+    if (obj) {
+      console.log(`Autofill Tool : ${message}`, obj);
+    } else {
+      console.log(`Autofill Tool : ${message}`);
+    }
+  }
 
   /**
    * jQuery functions for animate css
@@ -677,34 +762,19 @@ const Autofill = (function () {
   }
 
   /**
-   * read data from json file
-   * @param {string} url - the url for the data to read
-   */
-  function fetchJSON(url) {
-    return new Promise(((resolve, reject) => {
-      jQuery.getJSON(url)
-        .done((json) => {
-          resolve(json.autofill);
-        })
-        .fail((xhr, status, err) => {
-          reject(status + err.message);
-        });
-    }));
-  }
-
-  /**
    * Start events to build the autofill "drop down menu"
    */
   function getAutofillList() {
-    fetchJSON(myURL).then((data) => {
-      // build out drop down menu
+    const options = {
+      url: myURL,
+      dataType: "json"
+    };
+    jQuery.ajax(myURL).done((data) => {
+      // log("data", data);
       buildAutofillList(data);
-    }).catch((error) => {
-      console.log("autofill : autofill list failed to load, reverting to manual autofill entry method");
-      console.log(error);
-
-      addButton.onclick = bindAddAutofill;
-    });
+    }).fail((error) => {
+      log("Autofill List Failed to Load, reverting to manual Autofill Entry Method", error);
+    }).always();
   }
 
   /**
@@ -928,10 +998,11 @@ const Autofill = (function () {
    */
   function getToolData() {
     Promise.all([loadAutofillStyles, getWebsiteGeneralInfo, getWebsitePhoneNumbers]).then(() => {
+      log("All Settings Loaded");
       window.onload = setup;
-    }, () => {
+    }, (error) => {
       // tool failed to load
-      console.log("Autofill Tool Failed to Load");
+      log("Autofill Tool Failed to Load data, resorting to default values", error);
     });
   }
 
