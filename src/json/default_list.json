@@ -1,0 +1,58 @@
+[
+	{
+		"autofillTag": "***How to Separate Words***",
+		"searchTerms": "Separate words with --> ;"
+	},
+	{
+		"autofillTag": "***Example***",
+		"searchTerms": "*`*like*`*;*`*this*`*;*`*you*`*;*`*see*`*"
+	},
+	{
+		"autofillTag": "%DEALER_NAME%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%FRANCHISES%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%STREET%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%CITY%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%STATE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%STATE_FULL_NAME%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%ZIP%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%PHONE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%NEW_PHONE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%USED_PHONE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%SERVICE_PHONE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	},
+	{
+		"autofillTag": "%PARTS_PHONE%",
+		"searchTerms": "SEARCH_FOR_ME"
+	}
+]

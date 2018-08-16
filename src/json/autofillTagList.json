@@ -1,0 +1,225 @@
+[{
+    "autofill": "%BASEHREF%",
+    "description": "Relative URLs are appended to this."
+  },
+  {
+    "autofill": "%BODY_STYLE%",
+    "description": "body style of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%CERTIFIED%",
+    "description": ""
+  },
+  {
+    "autofill": "%CITY%",
+    "description": "City of the Dealership"
+  },
+  {
+    "autofill": "%CURRENT_YEAR%",
+    "description": "Current system year"
+  },
+  {
+    "autofill": "%DEALER_CODE%",
+    "description": "Dealer code aka BAC"
+  },
+  {
+    "autofill": "%DEALER_GEO_ONE%",
+    "description": ""
+  },
+  {
+    "autofill": "%DEALER_GEO_THREE%",
+    "description": ""
+  },
+  {
+    "autofill": "%DEALER_GEO_TWO%",
+    "description": ""
+  },
+  {
+    "autofill": "%DEALER_NAME%",
+    "description": "Dealership Name"
+  },
+  {
+    "autofill": "%DMA%",
+    "description": "DMA code for the dealership"
+  },
+  {
+    "autofill": "%ENGINE%",
+    "description": "engine of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%ENV%",
+    "description": ""
+  },
+  {
+    "autofill": "%EXTERIOR_COLOR%",
+    "description": "Exterior color of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%FACEBOOK_USERNAME%",
+    "description": ""
+  },
+  {
+    "autofill": "%FINANCE_PHONE%",
+    "description": "Phone # for Finance department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%FLEET_PHONE%",
+    "description": "Phone # for Fleet department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%FRANCHISES%",
+    "description": "Dealership Franchises"
+  },
+  {
+    "autofill": "%FRANCHISES_PHRASE%",
+    "description": ""
+  },
+  {
+    "autofill": "%FUEL_TYPE%",
+    "description": ""
+  },
+  {
+    "autofill": "%INV_MAKES%",
+    "description": "Current Makes in the dealer's inventory"
+  },
+  {
+    "autofill": "%INV_MODELS%",
+    "description": "Current Models in the dealer's inventory"
+  },
+  {
+    "autofill": "%LEAD_EVENT_ID%",
+    "description": ""
+  },
+  {
+    "autofill": "%MAKE%",
+    "description": "Make of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%MODEL%",
+    "description": "Model of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%MODELS%",
+    "description": "Current Models for the dealership franchises"
+  },
+  {
+    "autofill": "%NEW/USED%",
+    "description": ""
+  },
+  {
+    "autofill": "%NEW_PHONE%",
+    "description": "Phone # for New Vehicles department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%ONSTAR_FRANCHISE%",
+    "description": ""
+  },
+  {
+    "autofill": "%PAGE%",
+    "description": "Page label if one exists, if not then uses page name. This is the page you see in the URL."
+  },
+  {
+    "autofill": "%PAGE_LABEL%",
+    "description": ""
+  },
+  {
+    "autofill": "%PAGE_LAYOUT%",
+    "description": ""
+  },
+  {
+    "autofill": "%PAGE_NAME%",
+    "description": ""
+  },
+  {
+    "autofill": "%PARTS_PHONE%",
+    "description": "Phone # for Parts department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%PHONE%",
+    "description": "Default Phone # or SALES department phone # (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%PREFERRED_METRO_AREA%",
+    "description": "Preferred Metro area for the Dealership"
+  },
+  {
+    "autofill": "%PREFERRED_STATE%",
+    "description": "Preferred State (abbreviated) of the Dealership"
+  },
+  {
+    "autofill": "%PREFERRED_STATE_FULL_NAME%",
+    "description": ""
+  },
+  {
+    "autofill": "%SERVICE_PHONE%",
+    "description": "Phone # for Service department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%SESSION_ID%",
+    "description": "session ID set by app server"
+  },
+  {
+    "autofill": "%SITE_VERSION_STATE%",
+    "description": ""
+  },
+  {
+    "autofill": "%STATE%",
+    "description": "State (abbreviated) of the Dealership"
+  },
+  {
+    "autofill": "%STATE_FULL_NAME%",
+    "description": ""
+  },
+  {
+    "autofill": "%STOCK_NUMBER%",
+    "description": ""
+  },
+  {
+    "autofill": "%STREET%",
+    "description": "Street address 1 value from Settings / General"
+  },
+  {
+    "autofill": "%TRANSMISSION%",
+    "description": "Transmission of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%TRIM%",
+    "description": "Trim (what ever is configured Mfr/Taxonomy label) of the Vehicle that is currently being browsed"
+  },
+  {
+    "autofill": "%TWITTER_USERNAME%",
+    "description": ""
+  },
+  {
+    "autofill": "%TYPE%",
+    "description": "body type"
+  },
+  {
+    "autofill": "%USED_PHONE%",
+    "description": "Phone # for Used Vehicles department (Actual Dealership phone # or Call tracking # depending on the traffic source)"
+  },
+  {
+    "autofill": "%VEHICLE_SEARCH_PAGE_KEYWORDS%",
+    "description": "Pulls in the first value for the following search params search, make, model, year"
+  },
+  {
+    "autofill": "%VIN%",
+    "description": "VIN value of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%VISITOR_ID%",
+    "description": "ID from the traffic server used in pixel tags. Saved in a cookie on the consumer's computer."
+  },
+  {
+    "autofill": "%WEB_ID%",
+    "description": "web_id of the site"
+  },
+  {
+    "autofill": "%YEAR%",
+    "description": "Year of the Vehicle that is currently browsed"
+  },
+  {
+    "autofill": "%ZIP%",
+    "description": "Zip code for the Dealership"
+  }
+]

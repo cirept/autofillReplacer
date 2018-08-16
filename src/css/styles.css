@@ -1,0 +1,164 @@
+@import url('https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css');
+@import url('https://fonts.googleapis.com/css?family=Lato');
+.customEditorTools {
+  position: absolute;
+  left: 200px;
+  padding: 0 10px 10px 10px;
+  background-color: rgb(238, 238, 238);
+  font-family: 'Lato', monospace;
+  font-size: 13px;
+}
+
+.btn-wd {
+  padding: 5px 30px;
+}
+
+#toolMessageDisplay {
+  color: red;
+  text-align: center;
+}
+
+.btn-autofill-tool {
+  background: #824FD6;
+  color: #fff;
+}
+
+#autofillOptions {
+  margin: auto;
+}
+
+.btn-autofill-tool:hover {
+  background: #793CC4;
+  cursor: pointer;
+  cursor: hand;
+}
+
+.minimizeList {
+  position: relative;
+  float: right;
+}
+
+.my-handle {
+  border: 1px dotted #793CC4;
+  padding: 2px 6px 2px 5px;
+  cursor: move;
+  cursor: -webkit-grabbing;
+  display: inline-block;
+}
+
+.autofillTag {
+  padding: 0 10px 0 0;
+  text-align: center;
+  color: black;
+  word-wrap: break-word;
+}
+
+.list-action-container {
+  margin-top: 10px;
+}
+
+.regEx {
+  background: #793CC4;
+  color: #fff;
+  border: 1px solid rgb(255, 255, 255);
+  line-height: 1.75rem;
+  width: 245px;
+  text-indent: 15px;
+}
+
+.autofillEntry {
+  padding: 5px;
+  border: 1px solid #793CC4;
+  color: #793CC4;
+  /* margin-bottom: .25rem; */
+  /* margin-top: .25rem; */
+  margin: .25rem auto;
+  align-items: center;
+  position: relative;
+}
+
+.autofillEntry div:last-child {
+  margin-left: auto;
+}
+
+.js-remove {
+  cursor: pointer;
+  cursor: hand;
+  /* position: absolute; */
+  /* right: 10px; */
+}
+
+li.autofill-list-item {
+  display: block;
+}
+
+.autofill-dropdown:focus {
+  outline: 0;
+}
+
+.autofill-dropdown li {
+  text-align: center;
+  font-size: 12px;
+  padding: 5px 0;
+}
+
+.autofill-dropdown li:hover {
+  background: rgba(121, 60, 196, .5);
+  cursor: pointer;
+  cursor: hand;
+}
+
+.hide {
+  display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  background: rgba(0, 0, 0, .75);
+  cursor: no-drop;
+}
+
+.myError {
+  border: 1px solid red;
+}
+
+.chosen {
+  color: #fff;
+  background-color: rgb(130, 198, 0);
+}
+
+.modal-body h3 {
+  text-decoration: underline;
+}
+
+.modal-body li {
+  margin: .5rem 2rem;
+  padding: 0;
+  list-style: initial;
+}
+
+.modal-dialog h2 {
+  font-size: 2rem;
+  background-color: #793CC4;
+  color: white;
+  padding: 5px;
+  text-align: center;
+}
+
+.modal-dialog h3 {
+  text-align: center;
+}
+
+.arrow {
+  margin: 0 10px;
+}
+
+.modal-body ul,
+.modal-body ol {
+  text-align: left;
+}
+
+.modal-body {
+  text-align: center;
+}
