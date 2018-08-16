@@ -1,0 +1,27 @@
+{
+	"name": "autofillReplacer",
+	"version": "1.0.0",
+	"description": "",
+	"private": true,
+	"directories": {
+		"doc": "docs"
+	},
+	"dependencies": {
+		"webpack": "^4.16.5"
+	},
+	"devDependencies": {},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/cirept/autofillReplacer.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/cirept/autofillReplacer/issues"
+	},
+	"homepage": "https://github.com/cirept/autofillReplacer#readme"
+}
