@@ -1,11 +1,12 @@
-import defaultList from "../json/default_list.json";
-import autofillTagList from "../json/autofillTagList.json";
-import request from 'request';
-import en_AU from "../json/locale_en_AU.json";
-import en_CA from "../json/locale_en_CA.json";
-import en_US from "../json/locale_en_US.json";
-import fr_CA from "../json/locale_fr_CA.json";
-import '../css/styles.css';
+import defaultList from "./data/default_list.json";
+import autofillTagList from "./data/autofillTagList.json";
+import request from "request";
+import en_AU from "./data/locale_en_AU.json";
+import en_CA from "./data/locale_en_CA.json";
+import en_US from "./data/locale_en_US.json";
+import fr_CA from "./data/locale_fr_CA.json";
+import "./utils/fontawesome";
+import "./style/styles.css";
 
 const AutofillReplacerTool = (function AutofillReplacerTool() {
 	let toolState = {
@@ -76,8 +77,10 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 		"https://raw.githubusercontent.com/cirept/autofillReplacer/master/assets/json/autofill_list.json";
 	/* eslint-disable */
 	// const myStyles = GM_getResourceURL("toolStyles");
-	const lastestChanges = GM_getResourceURL("changeLog");
-	const toolInstructions = GM_getResourceURL("toolInstructions");
+	const lastestChanges = "https://cdn.rawgit.com/cirept/autofillReplacer/1.1.8/docs/LatestChanges.md";
+	// const lastestChanges = GM_getResourceURL("changeLog");
+	const toolInstructions = "https://cdn.rawgit.com/cirept/autofillReplacer/1.1.8/docs/README.md";
+	// const toolInstructions = GM_getResourceURL("toolInstructions");
 	/* eslint-enable */
 
 	//
@@ -126,7 +129,8 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 	// message display props
 	messageDisplay.id = "toolMessageDisplay";
 	messageDisplay.classList.add("container-fluid");
-	messageDisplay.textContent = `Autofill tag text replacer tool - version ${GM_info.script.version}`;
+	messageDisplay.textContent = "Autofill tag text replacer tool - version 0.0.1-webpack";
+	// messageDisplay.textContent = `Autofill tag text replacer tool - version ${GM_info.script.version}`;
 
 	// default reset button props
 	defaultReset_button.id = "defaultReset";

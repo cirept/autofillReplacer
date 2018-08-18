@@ -1,17 +1,29 @@
 const path = require("path");
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const CleanWebpackPlugin = require("clean-webpack-plugin");
 
 module.exports = {
-	entry: "./src/js/autofillTag.js",
+	node: {
+		fs: "empty",
+		net: "empty",
+		tls: "empty",
+	},
+	entry: {
+		app: "./src/index.js",
+		fontawesome: "./src/utils/fontawesome.js",
+	},
+	devtool: "inline-source-map",
+	devServer: {
+		contentBase: "./dist",
+	},
 	plugins: [
-    new CleanWebpackPlugin(['dist']),
+		new CleanWebpackPlugin([ "dist" ]),
 		new HtmlWebpackPlugin({
 			title: "Auotfill Tool Test",
 		}),
 	],
 	output: {
-		filename: "bundle.js",
+		filename: "[name].bundle.js",
 		path: path.resolve(__dirname, "dist"),
 	},
 	module: {
@@ -23,6 +35,10 @@ module.exports = {
 			{
 				test: /\.(csv|tsv)$/,
 				use: [ "csv-loader" ],
+			},
+			{
+				test: /\.(woff|woff2|eot|ttf|otf)$/,
+				use: [ "file-loader" ],
 			},
 			{
 				test: /\.xml$/,
