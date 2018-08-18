@@ -307,27 +307,27 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 		array.forEach(functionToRun, thisArg);
 	}
 
-	/**
-   *  Generic function to perform ajax requests.  I wanted to make my own.  =]
-   * @param {Object} options - the ajax request options
-   * @param {string} options.url - the url to mkae the ajax request to
-   * @param {string} options.dataType - the data type to expect
-   * @returns {Promise} the data that is recieved from the ajax request
-   */
-	function fetch(options) {
-		return new Promise((resolve, reject) => {
-			log("fetching URL");
-			jQuery
-				.ajax(options)
-				.done((data) => {
-					resolve(data);
-				})
-				.fail((error) => {
-					reject(error);
-				})
-				.always();
-		});
-	}
+	// /**
+  //  *  Generic function to perform ajax requests.  I wanted to make my own.  =]
+  //  * @param {Object} options - the ajax request options
+  //  * @param {string} options.url - the url to mkae the ajax request to
+  //  * @param {string} options.dataType - the data type to expect
+  //  * @returns {Promise} the data that is recieved from the ajax request
+  //  */
+	// function fetch(options) {
+	// 	return new Promise((resolve, reject) => {
+	// 		log("fetching URL");
+	// 		jQuery
+	// 			.ajax(options)
+	// 			.done((data) => {
+	// 				resolve(data);
+	// 			})
+	// 			.fail((error) => {
+	// 				reject(error);
+	// 			})
+	// 			.always();
+	// 	});
+	// }
 
 	/**
    * retrieve object from local storage
@@ -589,7 +589,8 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 
 			// getLocaleAbbreviationInformation
 			// Get Website Information
-			fetch(options)
+			// fetch(options)
+			request(options)
 				.then(
 					(websiteSettingsData) => populateActiveAutofillList(websiteSettingsData),
 					(error) => rejectError(error)
