@@ -1,12 +1,12 @@
 // ==UserScript==
-// @name Autofill Tool - 1.1.6
+// @name Autofill Tool - 1.1.5-beta17
 // @namespace www.cobaltgroup.com
-// @version 1.1.6
+// @version 1.1.5-beta17
 // @run-at document-end
-// @downloadURL https://github.com/cirept/autofillReplacer/raw/master/assets/js/meta.user.js
-// @resource toolStyles https://cdn.rawgit.com/cirept/autofillReplacer/1.1.6/assets/css/autofill.css
-// @resource changeLog https://cdn.rawgit.com/cirept/autofillReplacer/1.1.6/docs/LatestChanges.md
-// @resource toolInstructions https://cdn.rawgit.com/cirept/autofillReplacer/1.1.6/docs/README.md
+// @downloadURL https://github.com/cirept/autofillReplacer/raw/develop/assets/js/develop.meta.user.js
+// @resource toolStyles https://cdn.rawgit.com/cirept/autofillReplacer/1.1.5-beta17/assets/css/autofill.css
+// @resource changeLog https://cdn.rawgit.com/cirept/autofillReplacer/1.1.5-beta17/docs/LatestChanges.md
+// @resource toolInstructions https://cdn.rawgit.com/cirept/autofillReplacer/1.1.5-beta17/docs/README.md
 // @include http://websites.cobalt.com/wsm/editSite.do*
 // @include http://websites.cobalt.com/wsm/cms.do*
 // @require https://code.jquery.com/jquery-3.3.1.min.js
@@ -14,7 +14,7 @@
 // @require https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js
 // @require https://use.fontawesome.com/releases/v5.1.0/js/all.js
 // @require https://cdn.rawgit.com/showdownjs/showdown/1.8.6/dist/showdown.min.js
-// @require https://cdn.rawgit.com/cirept/autofillReplacer/1.1.6/assets/js/autofillTag.js
+// @require https://cdn.rawgit.com/cirept/autofillReplacer/1.1.5-beta17/assets/js/autofillTag.js
 // @author cire.pt
 // @grant GM_getResourceURL
 // ==/UserScript==
