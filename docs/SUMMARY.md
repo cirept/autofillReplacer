@@ -11,5 +11,5 @@
   * [Latest Changes](the-tool/latest-changes.md)
   * [Enhancement Request](the-tool/enhancement-request.md)
 * [Special Interactions](special-interactions.md)
-* [Change Log](changelog.md)
+* [Change Log](change-log.md)
 
