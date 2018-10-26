@@ -7,7 +7,9 @@
 // @resource toolStyles https://cdn.rawgit.com/cirept/autofillReplacer/1.1.8/assets/css/autofill.css
 // @resource changeLog https://cdn.rawgit.com/cirept/autofillReplacer/1.1.8/docs/LatestChanges.md
 // @resource toolInstructions https://cdn.rawgit.com/cirept/autofillReplacer/1.1.8/docs/README.md
+// @include http://websites.cobalt.com/wsm/editSite.do*
 // @include https://websites.cobalt.com/wsm/editSite.do*
+// @include http://websites.cobalt.com/wsm/cms.do*
 // @include https://websites.cobalt.com/wsm/cms.do*
 // @require https://code.jquery.com/jquery-3.3.1.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js
