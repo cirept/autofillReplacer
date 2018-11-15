@@ -60,7 +60,10 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     activeList: [{}],
     autoToolReset: false,
     webID: "none",
-    locale: "none"
+    locale: "none",
+    toolSettings: {
+      autoApply: false
+    }
   };
   const autofillTagListURL = "https://raw.githubusercontent.com/cirept/autofillReplacer/master/assets/json/autofill_list.json";
   /* eslint-disable */
