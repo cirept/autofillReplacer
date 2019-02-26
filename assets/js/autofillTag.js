@@ -1273,6 +1273,15 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 
     // pass elements with children as base element for autofill replacing
     replaceTextCMS(recordEditWindow);
+
+    // enable Save button in order to save changes
+    const headerButtonsLength = headerButtons.length;
+
+    for (let z = 0; z < headerButtonsLength; z += 1) {
+      if (headerButtons[z].innerHTML.includes('save')) {
+        jQuery(headerButtons[z]).prop("disabled", false);
+      }
+    }
   }
 
 
@@ -1320,11 +1329,11 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 
     // run CMS Content Pop Up edit window IF WINDOW IS OPEN
     if (window.location.pathname.indexOf("editSite") >= 0 &&
-      siteEditorIframe.find("div#hiddenContentPopUpOuter").hasClass("opened")) {
+      siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
       // save contents of cms content edit frame
       replaceTextInPopupCMS();
     } else if (window.location.pathname.indexOf("editSite") >= 0 &&
-      !siteEditorIframe.find("div#hiddenContentPopUpOuter").hasClass("opened")) {
+      !siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
       // run tool on regular WSM window
       replaceTextInMainWindow();
     } else if (window.location.pathname.indexOf("cms") >= 0) {
