@@ -1266,7 +1266,10 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     const siteEditorIframe = contentFrame.find("iframe#siteEditorIframe").contents();
 
     // save contents of cms content edit frame
-    const cmsIframe = siteEditorIframe.find("iframe#cmsContentEditorIframe").contents();
+    const cmsIframe = siteEditorIframe.find("iframe#contentModalIframe").contents();
+
+    // get header buttons
+    const headerButtons = cmsIframe.find("div.actions.editor-actions").find("button.button.raised.disabled-for-readonly");
 
     // if quick CMS editor is open
     const recordEditWindow = cmsIframe.find("div.main-wrap").find(".input-field").find("div[data-which-field='copy']");
