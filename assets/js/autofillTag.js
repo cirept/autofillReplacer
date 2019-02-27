@@ -1334,9 +1334,11 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     if (window.location.pathname.indexOf("editSite") >= 0 &&
       siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
       // save contents of cms content edit frame
+      log('record editor is open');
       replaceTextInPopupCMS();
     } else if (window.location.pathname.indexOf("editSite") >= 0 &&
       !siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
+      log('Main WSM');
       // run tool on regular WSM window
       replaceTextInMainWindow();
     } else if (window.location.pathname.indexOf("cms") >= 0) {
