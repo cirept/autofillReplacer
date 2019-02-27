@@ -16,6 +16,6 @@ let autofillToolBody = document.querySelector('.customEditorTools');
 
 autofillToolBody.append(autoApply);
 
-function runAutoApply() {
-  document.
-}
+// function runAutoApply() {
+//   document.
+// }
