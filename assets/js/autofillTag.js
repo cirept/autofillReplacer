@@ -1,61 +1,61 @@
 const AutofillReplacerTool = (function AutofillReplacerTool() {
   let toolState = {
     defaultList: [{
-        "autofillTag": "***How to Separate Words***",
-        "searchTerms": "Separate words with --> ;"
-      },
-      {
-        "autofillTag": "***Example***",
-        "searchTerms": "*`*like*`*;*`*this*`*;*`*you*`*;*`*see*`*"
-      },
-      {
-        "autofillTag": "%DEALER_NAME%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%FRANCHISES%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%STREET%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%CITY%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%STATE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%STATE_FULL_NAME%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%ZIP%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%PHONE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%NEW_PHONE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%USED_PHONE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%SERVICE_PHONE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      },
-      {
-        "autofillTag": "%PARTS_PHONE%",
-        "searchTerms": "SEARCH_FOR_ME"
-      }
+      "autofillTag": "***How to Separate Words***",
+      "searchTerms": "Separate words with --> ;"
+    },
+    {
+      "autofillTag": "***Example***",
+      "searchTerms": "*`*like*`*;*`*this*`*;*`*you*`*;*`*see*`*"
+    },
+    {
+      "autofillTag": "%DEALER_NAME%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%FRANCHISES%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%STREET%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%CITY%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%STATE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%STATE_FULL_NAME%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%ZIP%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%PHONE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%NEW_PHONE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%USED_PHONE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%SERVICE_PHONE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    },
+    {
+      "autofillTag": "%PARTS_PHONE%",
+      "searchTerms": "SEARCH_FOR_ME"
+    }
     ],
     activeList: [{}],
     autoToolReset: false,
@@ -1285,6 +1285,16 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
         jQuery(headerButtons[z]).prop("disabled", false);
       }
     }
+
+    // 2019-02-28 - jun.kim@cdk.com - added the functionality to set the record state to default when creating new records
+    const contentEditor = cmsIframe.find("div.content-editor-container");
+    const selectOption = cmsIframe.find("div.select-container > div > select");
+
+    if (contentEditor.hasClass("active")) {
+      if (selectOption.val() == "NONE") {
+        cmsIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
+      }
+    }
   }
 
 
@@ -1436,7 +1446,7 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
         </div>
       </div>`;
 
-                    // attach modal to page
+      // attach modal to page
       document.body.appendChild(myModal);
 
       if (document.getElementById(`${name}Modal`)) {

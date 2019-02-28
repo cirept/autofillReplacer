@@ -1,5 +1,37 @@
 # Change Log
 
+## v1.1.11
+
+### Functionality
+
+* Added the functionality to set the record state to default when creating new records 
+
+``Released (02/28/2018)``
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
+## v1.1.10
+
+### Functionality
+
+* Updated tool to work with latest update on the WSM Pop-Up Editor Window.
+
+``Released (02/27/2018)``
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
 ## v1.1.8
 
 ### Functionality
