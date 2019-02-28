@@ -1286,6 +1286,7 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
       }
     }
 
+    // 2019-02-28 - jun.kim@cdk.com - added the functionality to set the record state to default when creating new records
     const contentEditor = cmsIframe.find("div.content-editor-container");
     const selectOption = cmsIframe.find("div.select-container > div > select");
 
