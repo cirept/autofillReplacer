@@ -1277,21 +1277,21 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     // pass elements with children as base element for autofill replacing
     replaceTextCMS(recordEditWindow);
 
-    const contentEditor = cmsIframe.find("div.content-editor-container");
-    const selectOption = cmsIframe.find("div.select-container > div > select");
-
-    if (contentEditor.hasClass("active")) {
-      if (selectOption.val() == "NONE") {
-        cmsIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
-      }
-    }
-
     // enable Save button in order to save changes
     const headerButtonsLength = headerButtons.length;
 
     for (let z = 0; z < headerButtonsLength; z += 1) {
       if (headerButtons[z].innerHTML.includes('save')) {
         jQuery(headerButtons[z]).prop("disabled", false);
+      }
+    }
+
+    const contentEditor = cmsIframe.find("div.content-editor-container");
+    const selectOption = cmsIframe.find("div.select-container > div > select");
+
+    if (contentEditor.hasClass("active")) {
+      if (selectOption.val() == "NONE") {
+        cmsIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
       }
     }
   }
