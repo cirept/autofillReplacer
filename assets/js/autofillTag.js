@@ -1285,6 +1285,15 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
         jQuery(headerButtons[z]).prop("disabled", false);
       }
     }
+
+        const contentEditor = cmsIframe.find("div.content-editor-container");
+        const selectOption = cmsIframe.find("div.select-container > div > select");
+
+        if (contentEditor.hasClass("active")) {
+            if (selectOption.val() == "NONE") {
+                modalIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
+            }
+        }
   }
 
 
