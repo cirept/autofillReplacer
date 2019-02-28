@@ -1,5 +1,21 @@
 # Change Log
 
+## v1.1.10
+
+### Functionality
+
+* Updated tool to work with latest WSM update.
+
+``Released (07/17/2018)``
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
 ## v1.1.8
 
 ### Functionality
