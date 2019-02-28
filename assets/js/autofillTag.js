@@ -1291,7 +1291,7 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 
     if (contentEditor.hasClass("active")) {
       if (selectOption.val() == "NONE") {
-        modalIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
+        cmsIframe.find("div.select-container > div > select > option[value='DEFAULT']").attr("selected", "selected");
       }
     }
   }
