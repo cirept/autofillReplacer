@@ -60,7 +60,10 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     activeList: [{}],
     autoToolReset: false,
     webID: "none",
-    locale: "none"
+    locale: "none",
+    toolSettings: {
+      autoApply: false
+    }
   };
   const autofillTagListURL = "https://raw.githubusercontent.com/cirept/autofillReplacer/master/assets/json/autofill_list.json";
   /* eslint-disable */
@@ -1263,13 +1266,25 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
     const siteEditorIframe = contentFrame.find("iframe#siteEditorIframe").contents();
 
     // save contents of cms content edit frame
-    const cmsIframe = siteEditorIframe.find("iframe#cmsContentEditorIframe").contents();
+    const cmsIframe = siteEditorIframe.find("iframe#contentModalIframe").contents();
+
+    // get header buttons
+    const headerButtons = cmsIframe.find("div.actions.editor-actions").find("button.button.raised.disabled-for-readonly");
 
     // if quick CMS editor is open
     const recordEditWindow = cmsIframe.find("div.main-wrap").find(".input-field").find("div[data-which-field='copy']");
 
     // pass elements with children as base element for autofill replacing
     replaceTextCMS(recordEditWindow);
+
+    // enable Save button in order to save changes
+    const headerButtonsLength = headerButtons.length;
+
+    for (let z = 0; z < headerButtonsLength; z += 1) {
+      if (headerButtons[z].innerHTML.includes('save')) {
+        jQuery(headerButtons[z]).prop("disabled", false);
+      }
+    }
   }
 
 
@@ -1317,11 +1332,13 @@ const AutofillReplacerTool = (function AutofillReplacerTool() {
 
     // run CMS Content Pop Up edit window IF WINDOW IS OPEN
     if (window.location.pathname.indexOf("editSite") >= 0 &&
-      siteEditorIframe.find("div#hiddenContentPopUpOuter").hasClass("opened")) {
+      siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
       // save contents of cms content edit frame
+      log('record editor is open');
       replaceTextInPopupCMS();
     } else if (window.location.pathname.indexOf("editSite") >= 0 &&
-      !siteEditorIframe.find("div#hiddenContentPopUpOuter").hasClass("opened")) {
+      !siteEditorIframe.find("div#hiddenRedesignContentPopUpOuter").hasClass("opened")) {
+      log('Main WSM');
       // run tool on regular WSM window
       replaceTextInMainWindow();
     } else if (window.location.pathname.indexOf("cms") >= 0) {
