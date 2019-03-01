@@ -1,3 +1,20 @@
+## v1.1.13
+
+### Functionality
+
+* Updated tool to work with latest Record Editor Pop Up in WSM.
+* Added "default state" selector (Will auto select when clicking the "magic wand")
+
+``Released (07/17/2018)``
+
+<br>
+<br>
+
+---
+
+<br>
+<br>
+
 ## v1.1.8
 
 ### Functionality
