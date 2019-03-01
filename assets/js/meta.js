@@ -11,6 +11,7 @@
 // @include https://websites.cobalt.com/wsm/editSite.do*
 // @include http://websites.cobalt.com/wsm/cms.do*
 // @include https://websites.cobalt.com/wsm/cms.do*
+// @include https://websites.connectcdk.com/wsm/cms.do*
 // @include https://websites.connectcdk.com/wsm/editSite.do*
 // @require https://code.jquery.com/jquery-3.3.1.min.js
 // @require https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js
